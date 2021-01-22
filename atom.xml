@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://zl-wu.github.io</id>
+    <title>ZL Wu&apos;s notebook</title>
+    <updated>2021-01-22T17:34:28.248Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://zl-wu.github.io"/>
+    <link rel="self" href="https://zl-wu.github.io/atom.xml"/>
+    <subtitle>不废话，就是干</subtitle>
+    <logo>https://zl-wu.github.io/images/avatar.png</logo>
+    <icon>https://zl-wu.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2021, ZL Wu&apos;s notebook</rights>
+    <entry>
+        <title type="html"><![CDATA[MLA -- collaborative filtering]]></title>
+        <id>https://zl-wu.github.io/post/mla-collaborative-filtering/</id>
+        <link href="https://zl-wu.github.io/post/mla-collaborative-filtering/">
+        </link>
+        <updated>2020-07-03T16:35:35.000Z</updated>
+        <summary type="html"><![CDATA[<p>&quot;Collaborative filtering can be divided into users or items filtering. With its excellent speed and robustness, collaborative filtering is hot in the global Internet field. 😃😃&quot;</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>&quot;Collaborative filtering can be divided into users or items filtering. With its excellent speed and robustness, collaborative filtering is hot in the global Internet field. 😃😃&quot;</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MLA -- Decision Tree]]></title>
+        <id>https://zl-wu.github.io/post/mla_decision_tree/</id>
+        <link href="https://zl-wu.github.io/post/mla_decision_tree/">
+        </link>
+        <updated>2020-06-19T16:12:11.000Z</updated>
+        <summary type="html"><![CDATA[<p>Decision Tree is one of classical algorithms in machine learning. It can be used as both a classification model and a regression model. It is also suitable as a ensemble model, such as Random Forest. The history of Desicion Tree has three stages: ID3, C4.5 and CART</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Decision Tree is one of classical algorithms in machine learning. It can be used as both a classification model and a regression model. It is also suitable as a ensemble model, such as Random Forest. The history of Desicion Tree has three stages: ID3, C4.5 and CART</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MLA -- Logistic Regression (sklearn instruction)]]></title>
+        <id>https://zl-wu.github.io/post/mla-logistic-regression-sklearn-instruction/</id>
+        <link href="https://zl-wu.github.io/post/mla-logistic-regression-sklearn-instruction/">
+        </link>
+        <updated>2020-06-10T16:42:45.000Z</updated>
+        <summary type="html"><![CDATA[<p>This is a summary of using logistic regression libraries in sklearn. Focus on the matters that should be paid attention to in the tuning.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>This is a summary of using logistic regression libraries in sklearn. Focus on the matters that should be paid attention to in the tuning.</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MLA -- Regularization Lasso Regression]]></title>
+        <id>https://zl-wu.github.io/post/mla-regularization-lasso-regression/</id>
+        <link href="https://zl-wu.github.io/post/mla-regularization-lasso-regression/">
+        </link>
+        <updated>2020-06-09T16:50:51.000Z</updated>
+        <summary type="html"><![CDATA[<p>&quot;What is the lasso regression? Add L2 norm into loss function.&quot;</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>&quot;What is the lasso regression? Add L2 norm into loss function.&quot;</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MLA -- Logistic Regression]]></title>
+        <id>https://zl-wu.github.io/post/mla-logistic-regression/</id>
+        <link href="https://zl-wu.github.io/post/mla-logistic-regression/">
+        </link>
+        <updated>2020-06-09T16:43:57.000Z</updated>
+        <summary type="html"><![CDATA[<p>&quot;Logistic Regression is a kind of very classical and basic classification algorithm.&quot;</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>&quot;Logistic Regression is a kind of very classical and basic classification algorithm.&quot;</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MLA -- Linear Regression Principle]]></title>
+        <id>https://zl-wu.github.io/post/mla-linear-regression-principle/</id>
+        <link href="https://zl-wu.github.io/post/mla-linear-regression-principle/">
+        </link>
+        <updated>2020-05-31T16:41:08.000Z</updated>
+        <summary type="html"><![CDATA[<p>&quot;Linear Regression is the beginning and the most basic algorithm.&quot;</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>&quot;Linear Regression is the beginning and the most basic algorithm.&quot;</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MLA -- Least Square method]]></title>
+        <id>https://zl-wu.github.io/post/mla-least-square-method/</id>
+        <link href="https://zl-wu.github.io/post/mla-least-square-method/">
+        </link>
+        <updated>2020-05-24T16:39:24.000Z</updated>
+        <summary type="html"><![CDATA[<p>&quot;A standard approach in regression analysis to approximate the solution of overdetermined systems.&quot;</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>&quot;A standard approach in regression analysis to approximate the solution of overdetermined systems.&quot;</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MLA -- Gradient Descent method]]></title>
+        <id>https://zl-wu.github.io/post/mla-gradient-descent-method/</id>
+        <link href="https://zl-wu.github.io/post/mla-gradient-descent-method/">
+        </link>
+        <updated>2020-05-15T16:37:42.000Z</updated>
+        <summary type="html"><![CDATA[<p>When improving the model parameters of machine learning algorithms, that is, unconstrained optimalization problem.<br>
+<strong>Gradient Descent method</strong> is one of most common used methods. The other one is the least square method. Here is a complete summary of the gradient descent method.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>When improving the model parameters of machine learning algorithms, that is, unconstrained optimalization problem.<br>
+<strong>Gradient Descent method</strong> is one of most common used methods. The other one is the least square method. Here is a complete summary of the gradient descent method.</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MLA -- Naive Bayes theory]]></title>
+        <id>https://zl-wu.github.io/post/mla-naive-bayes-theory/</id>
+        <link href="https://zl-wu.github.io/post/mla-naive-bayes-theory/">
+        </link>
+        <updated>2020-05-14T16:47:58.000Z</updated>
+        <summary type="html"><![CDATA[<p>&quot;Priori Probability + data = Posterior probability&quot;</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>&quot;Priori Probability + data = Posterior probability&quot;</p>
+]]></content>
+    </entry>
+</feed>
