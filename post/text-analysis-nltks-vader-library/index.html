@@ -1,0 +1,801 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Text Analysis -- NLTK&#39;s vader library | ZL Wu&#39;s notebook</title>
+
+<link rel="shortcut icon" href="https://zl-wu.github.io/favicon.ico?v=1611338682495">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zl-wu.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<style>
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <style>
+    /* 导航栏样式 */
+    .navbar {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand {
+        display: inline-block;
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        line-height: inherit;
+        white-space: nowrap;
+    }
+
+    .navbar-brand:hover,
+    .navbar-brand:focus {
+        text-decoration: none;
+    }
+
+    .navbar-nav {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .navbar-collapse {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .navbar-toggler {
+        padding: 0.25rem 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .navbar-toggler:hover,
+    .navbar-toggler:focus {
+        text-decoration: none;
+    }
+
+    @media (min-width: 992px) {
+        .navbar-expand-lg {
+            -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+        }
+
+        .navbar-expand-lg .navbar-nav {
+            -ms-flex-direction: row;
+            flex-direction: row;
+        }
+
+        .navbar-expand-lg .navbar-collapse {
+            display: -ms-flexbox !important;
+            display: flex !important;
+            -ms-flex-preferred-size: auto;
+            flex-basis: auto;
+        }
+
+        .navbar-expand-lg .navbar-toggler {
+            display: none;
+        }
+    }
+
+    @media (max-width: 991px) {
+        #navbarSupportedContent {
+            display: none;
+        }
+    }
+</style>
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            ZL Wu&#39;s notebook
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1611338682495"
+                action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = function () {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Text Analysis -- NLTK&#39;s vader library
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-20 ·
+                    </time>
+                    
+                        <a href="https://zl-wu.github.io/tag/krjdQmA74/" class="post-tags">
+                            # NLP
+                        </a>
+                    
+                        <a href="https://zl-wu.github.io/tag/8gpF3Gc2sD/" class="post-tags">
+                            # Source Code
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>&quot;Topic: How does NLTK's vader library work to calculate sentiment value for text?&quot;</p>
+<!-- more -->
+<h2 id="topic-how-does-nltks-vader-library-work-to-calculate-sentiment-value-for-text">Topic: How does NLTK's vader library work to calculate sentiment value for text?</h2>
+<p><a href="https://github.com/nltk/nltk/blob/develop/nltk/sentiment/vader.py">source code -- vader.py</a></p>
+<h2 id="overview">Overview</h2>
+<p>NLTK's vader tool is mainly used to judge the sentiment polarity of a text: positive, negative or neutral. From its code design perspective, the vader is more suitable for analyzing short social media text sentiment analysis. The most important part of vader is class <strong>SentimentIntensityAnalyzer</strong>, and the core methods of this class are <strong>polarity_scores(), sentiment_valence() and score_valence()</strong>.</p>
+<figure data-type="image" tabindex="1"><img src="https://zl-wu.github.io/post-images/1611337627240.jpg" alt="" loading="lazy"></figure>
+<hr>
+<h3 id="one-simple-example-of-using-vader">One simple example of using vader</h3>
+<pre><code class="language-python">from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+analyzer = SentimentIntensityAnalyzer()
+sentiment = analyzer.polarity_scores(text)
+</code></pre>
+<p>As we all know, the first &quot;import&quot; statement imported “SentimentIntensityAnalyzer” class, and then we can use the methods of this class to calculate the text sentiment value.</p>
+<p>Next, we initiate a new instance &quot;analyzer&quot; of class &quot;SentimentIntensityAnalyzer&quot;.</p>
+<p>Finally, we call the methods &quot;polarity_scores()&quot; in this instance &quot;analyzer&quot;.</p>
+<p>Therefore, we can easily find out that the most critical question is what algorithm is included in the last method &quot;polarity_scores()&quot;?</p>
+<p><strong>At first what is the content of this class?</strong></p>
+<h2 id="class-sentimentintensityanalyzer">Class &quot;SentimentIntensityAnalyzer&quot;</h2>
+<pre><code class="language-python">class SentimentIntensityAnalyzer:
+    &quot;&quot;&quot;
+    Give a sentiment intensity score to sentences.
+    &quot;&quot;&quot;
+
+    def __init__(
+        self, lexicon_file=&quot;sentiment/vader_lexicon.zip/vader_lexicon/vader_lexicon.txt&quot;,
+    ):
+        self.lexicon_file = nltk.data.load(lexicon_file)
+        self.lexicon = self.make_lex_dict()
+        self.constants = VaderConstants()
+
+    def make_lex_dict(self):
+        &quot;&quot;&quot;
+        Convert lexicon file to a dictionary
+        &quot;&quot;&quot;
+        lex_dict = {}
+	    for line in lexicon.split(&quot;\n&quot;):
+	    	  # Only get &quot;word&quot; and &quot;sentiment value&quot; two data #
+	        (word, measure) = line.strip().split(&quot;\t&quot;)[0:2]
+	        lex_dict[word] = float(measure)
+	    return lex_dict
+
+    def polarity_scores(self, text):
+        &quot;&quot;&quot;
+        Return a float for sentiment strength based on the input text.
+        Positive values are positive valence, negative value are negative
+        valence.
+        &quot;&quot;&quot;
+        ...
+        return self.score_valence(sentiments, text)
+
+    def sentiment_valence(self, valence, sentitext, item, i, sentiments):
+        ...
+        return sentiments
+
+    def _least_check(self, valence, words_and_emoticons, i):
+        # check for negation case using &quot;least&quot;
+        ...
+        return valence
+
+    def _but_check(self, words_and_emoticons, sentiments):
+        ...
+        return sentiments
+
+    def _idioms_check(self, valence, words_and_emoticons, i):
+        ...
+        return valence
+
+    def _never_check(self, valence, words_and_emoticons, start_i, i):
+        ...
+        return valence
+
+    def _punctuation_emphasis(self, sum_s, text):
+        # add emphasis from exclamation points and question marks
+        ...
+        return qm_amplifier
+
+    def _sift_sentiment_scores(self, sentiments):
+        # want separate positive versus negative sentiment scores
+        ...
+        return pos_sum, neg_sum, neu_count
+
+    def score_valence(self, sentiments, text):
+        ...
+        return sentiment_dict
+</code></pre>
+<p>This class needs one argument -- lexicon_file, which is a database of sentiment values for each word and emoticon. <strong>It uses nltk's own database by default, but we can also replace our database as needed.</strong> The database has at least two columns, the first column is the word and the second column is the sentiment value. We can see what the database -- vader_lexicon.txt looks like at the end of this article.</p>
+<p>This class also has 10 methods inside.The method starting with underscore _ is generally a method used internally by this class, and generally does not need to be called separately by the user. We can also roughly guess from their names &quot;_xxx_check&quot; that their meaning is the detection and corresponding scheme of the special grammar of text, such as but, never or adjective-est, etc.</p>
+<p>So we can currently focus our main attention on this four methods:</p>
+<ul>
+<li>polarity_scores()   # main program, which is called mostly by users</li>
+<li>make_lex_dict()</li>
+<li>sentiment_valence()</li>
+<li>score_valence()</li>
+</ul>
+<p>Before starting to study the algorithm of this method, we must figure out what the two properties of this class generated in the constructor are.</p>
+<ul>
+<li>self.lexicon &amp; self.constants</li>
+</ul>
+<p>self.lexicon is generated by loading the word sentiment database and processing with the method make_lex_dict(). And self.lexicon is a dictionary, key and value pair is &quot;word or emoticon&quot; and &quot;sentiment value (a float number)&quot;</p>
+<p>self.constants is a instance of the class VaderConstants(), which defines some special values, and syntax, such as booster words, emphasize words and idioms. They are mainly used in the check method. The content of class VaderConstants() will be released later.</p>
+<hr>
+<h3 id="1-method-polarity_scores">1. Method &quot;polarity_scores()&quot;:</h3>
+<pre><code class="language-python">def polarity_scores(self, text):
+    &quot;&quot;&quot;
+    Return a float for sentiment strength based on the input text.
+    Positive values are positive valence, negative value are negative
+    valence.
+    &quot;&quot;&quot;
+    # text, words_and_emoticons, is_cap_diff = self.preprocess(text)
+    sentitext = SentiText(text, self.constants.PUNC_LIST,
+                          self.constants.REGEX_REMOVE_PUNCTUATION)
+    sentiments = []
+    words_and_emoticons = sentitext.words_and_emoticons
+    
+    for item in words_and_emoticons:
+    	# Traverse each takens as 'item'
+        valence = 0
+        i = words_and_emoticons.index(item)  
+        # if we need index, why not &quot;for i, item in enumerate(words_and_emoticons):&quot;
+        
+        if (
+            i &lt; len(words_and_emoticons) - 1
+            and item.lower() == &quot;kind&quot;
+            and words_and_emoticons[i + 1].lower() == &quot;of&quot;
+        ) or item.lower() in self.constants.BOOSTER_DICT:
+        	# if exists &quot;kind of&quot; or current item is a &quot;booster word&quot;
+        	# current item (token) sentiment is 0
+            sentiments.append(valence)
+            continue
+
+        sentiments = self.sentiment_valence(valence, sentitext, item, i, sentiments)
+
+    sentiments = self._but_check(words_and_emoticons, sentiments)
+
+    return self.score_valence(sentiments, text)
+</code></pre>
+<p><strong>sentitext</strong> is a new instance of the class &quot;SentiText&quot;, which is a small class used to Identify sentiment-relevant string-level properties of input text and Clean the text.</p>
+<p><strong>words_and_emoticons</strong> is a clean list of tokens without symbols, but emojis tokens are still retained. (This is also the significance of the existence of the <strong>_words_plus_punc()</strong> method when you call the <strong>_words_and_emoticons()</strong> in the <strong>SentiText</strong> class)</p>
+<p>Then we start to traverse the clean <strong>words_and_emoticons</strong> list, and then judge the sentiment value of each token in turn. If current word is &quot;kind&quot; and next word is &quot;of&quot; or the word is a booster word, the sentiment of the current word is 0. If the above special conditions do not exist, we continue to call another method sentiment_valence(valence, sentitext, item, i, sentiments). <u>So far, the valence is 0; item is the current word; i is the index of current word in the text; sentiments is a list of sentiment values <strong>up to the previous word</strong>.</u></p>
+<p>When we get the list of sentiment values for all words, we call a but check method and update a new list of the sentiments.</p>
+<p>Finally, we return an answer generated by method score_valence().</p>
+<p>So now we need to know what method <strong>sentiment_valence()</strong> and method <strong>score_valence()</strong> are</p>
+<p><em><strong>Remember: we don't remove all stop words in this situation. And before calculating sentiment value, this method has already remove all puctuations in the text and all words with 1 letter.</strong></em></p>
+<hr>
+<h3 id="2-method-sentiment_valence">2. Method &quot;sentiment_valence()&quot;:</h3>
+<pre><code class="language-python">def sentiment_valence(self, valence, sentitext, item, i, sentiments):
+    is_cap_diff = sentitext.is_cap_diff
+    words_and_emoticons = sentitext.words_and_emoticons
+    item_lowercase = item.lower()
+    if item_lowercase in self.lexicon:
+        # get the sentiment valence
+        valence = self.lexicon[item_lowercase]
+
+        # check if sentiment laden word is in ALL CAPS (while others aren't)
+        if item.isupper() and is_cap_diff:
+            if valence &gt; 0:
+                valence += self.constants.C_INCR
+            else:
+                valence -= self.constants.C_INCR
+
+        for start_i in range(0, 3):
+            if (
+                i &gt; start_i
+                and words_and_emoticons[i - (start_i + 1)].lower()
+                not in self.lexicon
+            ):
+                # dampen the scalar modifier of preceding words and emoticons
+                # (excluding the ones that immediately preceed the item) based
+                # on their distance from the current item.
+                s = self.constants.scalar_inc_dec(
+                    words_and_emoticons[i - (start_i + 1)], valence, is_cap_diff
+                )
+                if start_i == 1 and s != 0:
+                    s = s * 0.95
+                if start_i == 2 and s != 0:
+                    s = s * 0.9
+                valence = valence + s
+                valence = self._never_check(
+                    valence, words_and_emoticons, start_i, i
+                )
+                if start_i == 2:
+                    valence = self._idioms_check(valence, words_and_emoticons, i)
+
+                    # future work: consider other sentiment-laden idioms
+                    # other_idioms =
+                    # {&quot;back handed&quot;: -2, &quot;blow smoke&quot;: -2, &quot;blowing smoke&quot;: -2,
+                    #  &quot;upper hand&quot;: 1, &quot;break a leg&quot;: 2,
+                    #  &quot;cooking with gas&quot;: 2, &quot;in the black&quot;: 2, &quot;in the red&quot;: -2,
+                    #  &quot;on the ball&quot;: 2,&quot;under the weather&quot;: -2}
+
+        valence = self._least_check(valence, words_and_emoticons, i)
+
+    sentiments.append(valence)
+    return sentiments
+</code></pre>
+<p>Let's review the code when we are calling this method in the polarity_scores().</p>
+<ul>
+<li>sentiments = self.sentiment_valence(valence, sentitext, item, i, sentiments)</li>
+</ul>
+<p>&quot;valence&quot; is 0; &quot;item&quot; is the current word; &quot;i&quot; is the index of current word in the text; &quot;sentiments&quot; is a list of sentiment values up to the previous word.</p>
+<p>Keep going on...</p>
+<p><strong>is_cap_diff</strong> is a booling value.</p>
+<ul>
+<li>If it is True, the word list is a mixture of all uppercase words and ordinary words, such as ['HELLO','world'].</li>
+<li>However, if there is &quot;no total-uppercase words in the list&quot; or &quot;all words are total-uppercase, which leads to no emphasis on some individual words&quot;, it'll be False, such as ['Hello','World] or ['HELLO','WORLD'].</li>
+</ul>
+<p><strong>words_and_emoticons</strong> is the clean token list of the text without puctuations.<br>
+<strong>item_lowercase</strong> is the lowercase form of the current word.</p>
+<p>If the item_lowercase is not in lexicon (database), the valence of the current word is 0. If it is in our lexicon, then we can get the valence from our lexicon database. Then depending on the context, we will also slightly adjust its value.</p>
+<ul>
+<li>If the current word is total-uppercase and <strong>is_cap_diff</strong> is True, current word is a emphasis in the text, we need to add or substract a constant value C_INCR based on its valence.</li>
+<li>Next &quot;For&quot; loop is interesting, <strong>it updates the valence of the current word again based on the previous three words</strong>! Loop three times to see if the three words in front of the current word are in the lexicon database. Because all booster words are not in lexicon database, but in BOOSTER_DICT variable.
+<ul>
+<li><strong>scalar_inc_dec()</strong> method is to check if the preceding words increase, decrease, or negate/nullify the valence. (Check booster word, uppercase emphasis and currenr word's valence)</li>
+<li><strong>_never_check()</strong>: Detection and corresponding schema, if &quot;never&quot; exists on previous three words.</li>
+<li><strong>_idioms_check()</strong>: Detection and corresponding schema, if context 3 words make up an idiom.</li>
+</ul>
+</li>
+<li><strong>_least_check()</strong></li>
+</ul>
+<p>Summary Step:</p>
+<ul>
+<li>Get basic valence of the current word from the lexicon database</li>
+<li>1st update on valence <strong>(uppercase emphsis)</strong>: if the current word is uppercased compared with other words, it is an emphsis word. Add or substract an scalar value C_INCR based on positive or negtive current valence.</li>
+<li>2nd update on valence <strong>(context booster)</strong>: if the previous three words exists booster words, which are included in BOOSTER_DICT, it is also an emphsis to current word. Calculate a scalar value and add or substract to current valence.
+<ul>
+<li>Rule 1: The booster word also applies to uppercase emphsis rule.</li>
+<li>Rule 2: Neighboring word has 100% influence. Booster word that is two words distance away from the current has 95% influence. Similarly, three words distance has 90% influence.</li>
+</ul>
+</li>
+<li>3rd update on valence <strong>(context never)</strong></li>
+<li>4th update on valence <strong>(context idioms)</strong></li>
+<li>5th update on valence <strong>(context least)</strong></li>
+<li>Append lastest current word's valence to the sentiments list.</li>
+</ul>
+<p><em><strong>Remember: There are only 7502 token in the lexicon database.If the word in the text is not included in the lexicon database, it doesn't have valence (or sentiment / it is a nerual word). But these words may affect subsequent words' valence.</strong></em></p>
+<hr>
+<h3 id="3-method-score_valence">3. Method &quot;score_valence()&quot;:</h3>
+<pre><code class="language-python">def score_valence(self, sentiments, text):
+    if sentiments:
+        sum_s = float(sum(sentiments))
+        # compute and add emphasis from punctuation in text
+        punct_emph_amplifier = self._punctuation_emphasis(sum_s, text)
+        if sum_s &gt; 0:
+            sum_s += punct_emph_amplifier
+        elif sum_s &lt; 0:
+            sum_s -= punct_emph_amplifier
+
+        compound = self.constants.normalize(sum_s)
+        # discriminate between positive, negative and neutral sentiment scores
+        pos_sum, neg_sum, neu_count = self._sift_sentiment_scores(sentiments)
+
+        if pos_sum &gt; math.fabs(neg_sum):
+            pos_sum += punct_emph_amplifier
+        elif pos_sum &lt; math.fabs(neg_sum):
+            neg_sum -= punct_emph_amplifier
+
+        total = pos_sum + math.fabs(neg_sum) + neu_count
+        pos = math.fabs(pos_sum / total)
+        neg = math.fabs(neg_sum / total)
+        neu = math.fabs(neu_count / total)
+
+    else:
+        compound = 0.0
+        pos = 0.0
+        neg = 0.0
+        neu = 0.0
+
+    sentiment_dict = {
+        &quot;neg&quot;: round(neg, 3),
+        &quot;neu&quot;: round(neu, 3),
+        &quot;pos&quot;: round(pos, 3),
+        &quot;compound&quot;: round(compound, 4),
+    }
+
+    return sentiment_dict
+</code></pre>
+<p>If sentiments is not None:</p>
+<p><strong>sum_s</strong> is the sum of all word valence in the sentiments list.</p>
+<p><strong>punct_emph_amplifier</strong> is also a scalar that used to update sum_s value. It is based on counts of &quot;!&quot; and &quot;?&quot;.</p>
+<p>According to the overall sentiment value, add or substract punct_emph_amplifier value to the sum_s.</p>
+<p><strong>compound</strong> is the normalize of sum_s. compound = sum_s/sqrt(sum_s^2+15)</p>
+<pre><code>def normalize(self, score, alpha=15):
+    &quot;&quot;&quot;
+    Normalize the score to be between -1 and 1 using an alpha that
+    approximates the max expected value
+    &quot;&quot;&quot;
+    norm_score = score / math.sqrt((score * score) + alpha)
+    return norm_score
+</code></pre>
+<p><strong>_sift_sentiment_scores()</strong></p>
+<pre><code>def _sift_sentiment_scores(self, sentiments):
+    # want separate positive versus negative sentiment scores
+    pos_sum = 0.0
+    neg_sum = 0.0
+    neu_count = 0
+    for sentiment_score in sentiments:
+        if sentiment_score &gt; 0:
+            pos_sum += (
+                float(sentiment_score) + 1
+            )  # compensates for neutral words that are counted as 1
+        if sentiment_score &lt; 0:
+            neg_sum += (
+                float(sentiment_score) - 1
+            )  # when used with math.fabs(), compensates for neutrals
+        if sentiment_score == 0:
+            neu_count += 1
+    return pos_sum, neg_sum, neu_count
+</code></pre>
+<p><strong>_sift_sentiment_scores()</strong> counts the number of pos, neg and neu words. And for pos words and neg words, their latest valences are also added into pos_sum and neg_sum.</p>
+<p><strong>pos_sum, neg_sum and neu_count</strong> also need to be update based on <strong>punct_emph_amplifier</strong>.</p>
+<p><strong><em>The sum of pos, neg and neu is one</em>.</strong></p>
+<hr>
+<h2 id="class-sentitext">Class &quot;SentiText&quot;</h2>
+<pre><code class="language-python">class SentiText:
+    &quot;&quot;&quot;
+    Identify sentiment-relevant string-level properties of input text.
+    &quot;&quot;&quot;
+
+    def __init__(self, text, punc_list, regex_remove_punctuation):
+        if not isinstance(text, str):
+            text = str(text.encode(&quot;utf-8&quot;))
+        self.text = text
+        self.PUNC_LIST = punc_list
+        self.REGEX_REMOVE_PUNCTUATION = regex_remove_punctuation
+        self.words_and_emoticons = self._words_and_emoticons()
+        # doesn't separate words from
+        # adjacent punctuation (keeps emoticons &amp; contractions)
+        self.is_cap_diff = self.allcap_differential(self.words_and_emoticons)
+
+    def _words_plus_punc(self):
+        &quot;&quot;&quot;
+        Returns mapping of form:
+        {
+            'cat,': 'cat',
+            ',cat': 'cat',
+        }
+        &quot;&quot;&quot;
+        no_punc_text = self.REGEX_REMOVE_PUNCTUATION.sub(&quot;&quot;, self.text)
+        # removes punctuation (but loses emoticons &amp; contractions)
+        words_only = no_punc_text.split()
+        # remove singletons
+        words_only = set(w for w in words_only if len(w) &gt; 1)
+        # the product gives ('cat', ',') and (',', 'cat')
+        punc_before = {&quot;&quot;.join(p): p[1] for p in product(self.PUNC_LIST, words_only)}
+        punc_after = {&quot;&quot;.join(p): p[0] for p in product(words_only, self.PUNC_LIST)}
+        words_punc_dict = punc_before
+        words_punc_dict.update(punc_after)
+        return words_punc_dict
+
+    def _words_and_emoticons(self):
+        &quot;&quot;&quot;
+        Removes leading and trailing puncutation
+        Leaves contractions and most emoticons
+            Does not preserve punc-plus-letter emoticons (e.g. :D)
+        &quot;&quot;&quot;
+        wes = self.text.split()
+        words_punc_dict = self._words_plus_punc()
+        wes = [we for we in wes if len(we) &gt; 1]
+        for i, we in enumerate(wes):
+            if we in words_punc_dict:
+                wes[i] = words_punc_dict[we]
+        return wes
+
+    def allcap_differential(self, words):
+        &quot;&quot;&quot;
+        Check whether just some words in the input are ALL CAPS
+        :param list words: The words to inspect
+        :returns: `True` if some but not all items in `words` are ALL CAPS
+        &quot;&quot;&quot;
+        is_different = False
+        allcap_words = 0
+        for word in words:
+            if word.isupper():
+                allcap_words += 1
+        cap_differential = len(words) - allcap_words
+        if 0 &lt; cap_differential &lt; len(words):
+            is_different = True
+        return is_different
+</code></pre>
+<h2 id="class-vaderconstants">Class &quot;VaderConstants&quot;</h2>
+<pre><code class="language-python">class VaderConstants:
+    &quot;&quot;&quot;
+    A class to keep the Vader lists and constants.
+    &quot;&quot;&quot;
+    ##Constants##
+    # (empirically derived mean sentiment intensity rating increase for booster words)
+    B_INCR = 0.293
+    B_DECR = -0.293
+
+    # (empirically derived mean sentiment intensity rating increase for using
+    # ALLCAPs to emphasize a word)
+    C_INCR = 0.733
+
+    N_SCALAR = -0.74
+
+    NEGATE = {
+        &quot;aint&quot;,
+        &quot;arent&quot;,
+        &quot;cannot&quot;,
+        &quot;cant&quot;,
+        &quot;couldnt&quot;,
+        &quot;darent&quot;,
+        ...,
+    }
+
+    # booster/dampener 'intensifiers' or 'degree adverbs'
+    # http://en.wiktionary.org/wiki/Category:English_degree_adverbs
+
+    BOOSTER_DICT = {
+        &quot;absolutely&quot;: B_INCR,
+        &quot;amazingly&quot;: B_INCR,
+        &quot;awfully&quot;: B_INCR,
+        &quot;completely&quot;: B_INCR,
+        &quot;considerably&quot;: B_INCR,
+        &quot;decidedly&quot;: B_INCR,
+        ...
+        &quot;very&quot;: B_INCR,
+        &quot;almost&quot;: B_DECR,
+        &quot;barely&quot;: B_DECR,
+        &quot;kind of&quot;: B_DECR,
+        ...
+        &quot;sort of&quot;: B_DECR,
+        &quot;sorta&quot;: B_DECR,
+        &quot;sortof&quot;: B_DECR,
+        &quot;sort-of&quot;: B_DECR,
+    }
+
+    # check for special case idioms using a sentiment-laden keyword known to SAGE
+    SPECIAL_CASE_IDIOMS = {
+        &quot;the shit&quot;: 3,
+        &quot;the bomb&quot;: 3,
+        &quot;bad ass&quot;: 1.5,
+        &quot;yeah right&quot;: -2,
+        &quot;cut the mustard&quot;: 2,
+        &quot;kiss of death&quot;: -1.5,
+        &quot;hand to mouth&quot;: -2,
+    }
+
+    # for removing punctuation
+    REGEX_REMOVE_PUNCTUATION = re.compile(&quot;[{0}]&quot;.format(re.escape(string.punctuation)))
+
+    PUNC_LIST = [
+        &quot;.&quot;,
+        &quot;!&quot;,
+        &quot;?&quot;,
+        &quot;,&quot;,
+        &quot;;&quot;,
+        &quot;:&quot;,
+        &quot;-&quot;,
+        &quot;'&quot;,
+        '&quot;',
+        &quot;!!&quot;,
+        &quot;!!!&quot;,
+        &quot;??&quot;,
+        &quot;???&quot;,
+        &quot;?!?&quot;,
+        &quot;!?!&quot;,
+        &quot;?!?!&quot;,
+        &quot;!?!?&quot;,
+    ]
+
+    def __init__(self):
+        pass
+
+    def negated(self, input_words, include_nt=True):
+        &quot;&quot;&quot;
+        Determine if input contains negation words
+        &quot;&quot;&quot;
+        neg_words = self.NEGATE
+        if any(word.lower() in neg_words for word in input_words):
+            return True
+        if include_nt:
+            if any(&quot;n't&quot; in word.lower() for word in input_words):
+                return True
+        for first, second in pairwise(input_words):
+            if second.lower() == &quot;least&quot; and first.lower() != &quot;at&quot;:
+                return True
+        return False
+
+    def normalize(self, score, alpha=15):
+        &quot;&quot;&quot;
+        Normalize the score to be between -1 and 1 using an alpha that
+        approximates the max expected value
+        &quot;&quot;&quot;
+        norm_score = score / math.sqrt((score * score) + alpha)
+        return norm_score
+
+
+    def scalar_inc_dec(self, word, valence, is_cap_diff):
+        &quot;&quot;&quot;
+        Check if the preceding words increase, decrease, or negate/nullify the
+        valence
+        &quot;&quot;&quot;
+        scalar = 0.0
+        word_lower = word.lower()
+        if word_lower in self.BOOSTER_DICT:
+            scalar = self.BOOSTER_DICT[word_lower]
+            if valence &lt; 0:
+                scalar *= -1
+            # check if booster/dampener word is in ALLCAPS (while others aren't)
+            if word.isupper() and is_cap_diff:
+                if valence &gt; 0:
+                    scalar += self.C_INCR
+                else:
+                    scalar -= self.C_INCR
+        return scalar
+</code></pre>
+<h2 id="database-vader_lexicontxt">Database &quot;vader_lexicon.txt&quot;</h2>
+<p>We can take a quick look at the contents of the file &quot;vader_lexicon.txt&quot;:</p>
+<pre><code>$:	-1.5	0.80623	[-1, -1, -1, -1, -3, -1, -3, -1, -2, -1]
+%)	-0.4	1.0198	[-1, 0, -1, 0, 0, -2, -1, 2, -1, 0]
+%-)	-1.5	1.43178	[-2, 0, -2, -2, -1, 2, -2, -3, -2, -3]
+&amp;-:	-0.4	1.42829	[-3, -1, 0, 0, -1, -1, -1, 2, -1, 2]
+...
+adorableness	2.5	0.67082	[2, 3, 3, 2, 3, 2, 1, 3, 3, 3]
+adorably	2.1	0.7	[3, 1, 2, 3, 2, 2, 1, 3, 2, 2]
+adoration	2.9	0.7	[3, 3, 3, 2, 3, 3, 4, 2, 4, 2]
+adorations	2.2	0.87178	[2, 2, 3, 1, 3, 1, 3, 3, 1, 3]
+...
+</code></pre>
+<p>The first column is words and emoticons, the second column is sentiment value. In class SentimentIntensityAnalyzer, method &quot;make_lex_dict()&quot; only uses the first two columns: word name and sentiment value.</p>
+<p>What does 3rd column and 4th column represent?<br>
+How does these valence value come out?</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://zl-wu.github.io/post/text-analysis-textblob-sentiment/" class="post-title gt-a-link">
+                    Text Analysis -- TextBlob sentiment
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">不废话，就是干</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://zl-wu.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

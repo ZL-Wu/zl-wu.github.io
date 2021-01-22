@@ -1,0 +1,1049 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Git 幼儿园入门 | ZL Wu&#39;s notebook</title>
+
+<link rel="shortcut icon" href="https://zl-wu.github.io/favicon.ico?v=1611338682495">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zl-wu.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<style>
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <style>
+    /* 导航栏样式 */
+    .navbar {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand {
+        display: inline-block;
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        line-height: inherit;
+        white-space: nowrap;
+    }
+
+    .navbar-brand:hover,
+    .navbar-brand:focus {
+        text-decoration: none;
+    }
+
+    .navbar-nav {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .navbar-collapse {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .navbar-toggler {
+        padding: 0.25rem 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .navbar-toggler:hover,
+    .navbar-toggler:focus {
+        text-decoration: none;
+    }
+
+    @media (min-width: 992px) {
+        .navbar-expand-lg {
+            -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+        }
+
+        .navbar-expand-lg .navbar-nav {
+            -ms-flex-direction: row;
+            flex-direction: row;
+        }
+
+        .navbar-expand-lg .navbar-collapse {
+            display: -ms-flexbox !important;
+            display: flex !important;
+            -ms-flex-preferred-size: auto;
+            flex-basis: auto;
+        }
+
+        .navbar-expand-lg .navbar-toggler {
+            display: none;
+        }
+    }
+
+    @media (max-width: 991px) {
+        #navbarSupportedContent {
+            display: none;
+        }
+    }
+</style>
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            ZL Wu&#39;s notebook
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1611338682495"
+                action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = function () {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Git 幼儿园入门
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2019-11-20 ·
+                    </time>
+                    
+                        <a href="https://zl-wu.github.io/tag/GbFSc4g52/" class="post-tags">
+                            # git
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>&quot;这只是一个 Git 新手基础入门（幼儿园级别）&quot;</p>
+<h1 id="git">Git</h1>
+<p>Mind map:</p>
+<figure data-type="image" tabindex="1"><img src="https://zl-wu.github.io/post-images/1611338579423.png" alt="" loading="lazy"></figure>
+<h2 id="vcs版本管理系统发展">VCS（版本管理系统）发展</h2>
+<ul>
+<li>服务器文档式（VCS出现之前）</li>
+<li>集中式VCS</li>
+<li>分布式VCS （Git [Linux支付创造] ）</li>
+</ul>
+<h2 id="git-的特点">Git 的特点</h2>
+<ul>
+<li>最优的储存能力</li>
+<li>非凡的性能</li>
+<li>开源</li>
+<li>很容易做备份</li>
+<li>支持离线操作</li>
+<li>很容易定制工作流程</li>
+</ul>
+<h2 id="devops-工具全流程生命周期">DevOps 工具[全流程生命周期]</h2>
+<p>DevOps:持续交付实践</p>
+<ul>
+<li>Git</li>
+<li>GitHub</li>
+<li>GitLab [社区版本]</li>
+</ul>
+<h2 id="安装git">安装Git</h2>
+<ul>
+<li>https://git-scm.com/download/mac</li>
+<li>https://git-scm.com/book/zh/v2   [书]</li>
+</ul>
+<h3 id="配置user">配置USER</h3>
+<ul>
+<li>配置 user.name 和 user.email</li>
+</ul>
+<pre><code>$ git config --global user.name 'your_name'
+$ git config --global user.email 'your_email@domain.com'
+</code></pre>
+<p>Why git need these?<br>
+代码的每一次变更时，时间点与变更人 都是与变更信息捆绑在一起的。在Code Review时，每一次变更信息都带上了用户的Email地址，评审人员指出该用户的哪个文件有问题时，Git管控的Web系统会取出变更者的Email并发送邮件。必须配置！！</p>
+<p>--global有什么用呢？ 是什么意思呢？</p>
+<h3 id="config的三个作用域">config的三个作用域</h3>
+<p>config 可以配置许多仓库属性</p>
+<pre><code>$ git config --local
+$ git config --global
+$ git config --system
+</code></pre>
+<ul>
+<li>--local : 只对某个仓库有效 <em>[登录到某一个仓库 再设置该仓库]</em></li>
+<li>--global: 对当前用户的所有仓库有效 <em>[如登录Mac系统的用户Wu的所有10个仓库，因此变更人信息设置常用global]</em></li>
+<li>--system: 对系统的所有登录用户有效 <em>[不常用]</em></li>
+</ul>
+<p>显示config的配置，加list</p>
+<pre><code>$ git config --list --local
+		fatal: --local can only be used inside a git repository
+$ git config --list --global
+		filter.lfs.clean=git-lfs clean -- %f
+		filter.lfs.smudge=git-lfs smudge -- %f
+		filter.lfs.process=git-lfs filter-process
+		filter.lfs.required=true
+		user.email=wzhenglong@yahoo.com
+		user.name=zhenglong
+$ git config --list --system
+		fatal: unable to read config file '/etc/gitconfig': No such file or directory
+</code></pre>
+<p>注意：--global 和 --list的位置可以对调，无影响。</p>
+<h2 id="建立git仓库">建立Git仓库</h2>
+<p>两种场景：</p>
+<ol>
+<li>
+<p>把已有项目代码纳入Git管理</p>
+<pre><code>$ cd 项目代码所在的文件夹
+$ git init 
+</code></pre>
+</li>
+<li>
+<p>新建的项目直接用Git管理</p>
+<pre><code>$ cd 某个文件夹
+$ git init your_project #在当前路劲下创建和项目名称同名的文件夹
+# 该文件夹内会建立一个裸仓库，以.git后缀
+$ cd your_project
+</code></pre>
+</li>
+<li>
+<p>演示</p>
+<pre><code>$ git init git_learning
+Initialized empty Git repository in /Users/zhenglongwu/Desktop/Programming/Git/git_learning/.git/
+
+$ cd git_learning
+$ ls -al
+total 0
+drwxr-xr-x  3 zhenglongwu  staff   96 Sep 12 16:02 .
+drwxr-xr-x  3 zhenglongwu  staff   96 Sep 12 16:02 ..
+drwxr-xr-x  9 zhenglongwu  staff  288 Sep 12 16:02 .git
+
+$ cd .git
+$ ls -al
+total 24
+drwxr-xr-x   9 zhenglongwu  staff  288 Sep 12 16:02 .
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 16:02 ..
+-rw-r--r--   1 zhenglongwu  staff   23 Sep 12 16:02 HEAD
+-rw-r--r--   1 zhenglongwu  staff  137 Sep 12 16:02 config
+-rw-r--r--   1 zhenglongwu  staff   73 Sep 12 16:02 description
+drwxr-xr-x  13 zhenglongwu  staff  416 Sep 12 16:02 hooks
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 16:02 info
+drwxr-xr-x   4 zhenglongwu  staff  128 Sep 12 16:02 objects
+drwxr-xr-x   4 zhenglongwu  staff  128 Sep 12 16:02 refs
+</code></pre>
+<p><strong>比较局部配置与全局配置</strong></p>
+<pre><code>$  git config --list --global
+user.email=wzhenglong@yahoo.com
+user.name=zhenglong
+
+# 局部配置
+$ git config --local user.name 'user1'
+$ git config --local user.email '670362192@qq.com'
+$ git config --local --list
+user.name=user1
+user.email=670362192@qq.com
+
+#
+</code></pre>
+</li>
+</ol>
+<hr>
+<p><strong>基本Git操作</strong></p>
+<pre><code># cp cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file ... target_directory
+# cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file target_file
+
+$ cp ../readme.txt  .
+$ git commit -m'Add readme'
+	On branch master
+	
+	Initial commit
+	
+	Untracked files:
+		readme.txt
+	
+	nothing added to commit but untracked files present
+
+
+
+## git commit报错 因为没有跟踪该文件。我们需要先跟踪该文件
+
+$ git add readme.txt
+$ git status
+	On branch master
+	
+	No commits yet
+	
+	Changes to be committed:
+	  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+	
+		new file:   readme.txt
+
+$ git commit -m'Add readme'
+[master (root-commit) 61841ea] Add readme
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 readme.txt
+
+$ git log
+commit 61841eab81f0c26cfb9a884f4617169c0741c1fd (HEAD -&gt; master)
+Author: user1 &lt;670362192@qq.com&gt;
+Date:   Thu Sep 12 19:14:42 2019 -0400
+
+    Add readme
+</code></pre>
+<p>git add filename ==&gt; 表示文件添加到Git的暂存区中，Git已经可以开始管理这个文件了（在stage的状态）。同理，<br>
+(use &quot;git rm --cached <file>...&quot; to unstage)</p>
+<p>git commit</p>
+<p>git log ==&gt; 打印git的日志，看commit是否被创建出来了（包括完成提交的作者，邮箱[都是local配置优先] 和时间）</p>
+<hr>
+<h2 id="git的暂存区概念">Git的暂存区概念</h2>
+<!--![Git_model](git_model.png)-->
+<img src="https://raw.githubusercontent.com/ZL-Wu/blogImg/master/git/git_model.png"  height="300" width="495">
+<p>暂存区应用场景举例： 代码写好后先存入暂存区内，此时有一种重构的想法并在工作目录源代码上重构，若重构失败，可从暂存区中再调回之前的版本。[<code>暂存</code>：暂时存放，不是正式提交。可以让我们实验代码的多种可能性，修正到最佳后再提交]</p>
+<ul>
+<li>暂存：git add files</li>
+<li>正式提交：git commit</li>
+</ul>
+<pre><code>$ cp ../css3-windy-switch/index.html index.html
+$ git status
+On branch master
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+
+	index.html
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+
+$ cp -r ../css3-windy-switch/css .
+$ cp -r ../css3-windy-switch/css javascript
+$ rm -r javascript
+$ cp -r ../css3-windy-switch/js javascript
+$ git status
+	On branch master
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+
+	css/
+	index.html
+	javascript/
+
+</code></pre>
+<p>git status 是最常用的一个命令，我们常常都需要去运行看看当前目录的情况，上例子中出现了untracked files: index.html，是刚复制粘贴到文件夹（Git的当前仓库）。若要将这个index.html 纳入Git管理，先要git add</p>
+<p>注意：</p>
+<ul>
+<li>git add 可以添加多个文件（包括文件夹） 中间用空格隔开</li>
+<li>git add 要写文件名或者文件夹名</li>
+<li>git commit 只要写正式提交的备注，方便后期读懂提交仓库改动的意义</li>
+<li>git add -u  : 在git仓库中所有被Git管理了的新修改文件（tracked）一起再提交到暂存区中</li>
+</ul>
+<hr>
+<h3 id="git-文件重命名">Git 文件重命名</h3>
+<pre><code># Method1: 手动重命名方法
+$ mv readme.txt readme.md
+$ git status
+$ git add readme.md
+$ git rm readme.txt
+$ git status
+
+# Method2: 用Git的快速重命名命令（更高效）
+$ git mv readme.txt readme.md
+$ git status
+
+# 正式提交
+$ git commit -m'Move readme.txt to readme.md'
+$ git log
+</code></pre>
+<hr>
+<h3 id="git-log查看版本演变历史">Git log查看版本演变历史</h3>
+<pre><code># 便捷查看（将省略提交人信息）
+$ git log --oneline
+
+# 只看最近的4次或最近的2次
+$ git log -n4 --oneline
+$ git log -n2 --oneline
+
+
+# 查看当前的分支
+$ git branch -v
+
+# 创建一个分支叫temp，后面的数字是随意复制某一个commit的地址，在这个分支中，包含了包括所复制commit的所有之前的commit情况。
+$ git checkout -b temp d4e1729be
+
+# 其中head变成了temp分支。 
+$ git log --oneline
+	f9192c6 (HEAD -&gt; temp) Add test
+	d4e1729 Add javasrcipt
+	7c13cfe Add index and css
+	61841ea Add readme
+
+# 查看master的分支
+$ git log master --oneline
+
+# --all 查看所有分支的演变信息(父子关系)
+$ git log --all --oneline
+
+# --graph 图形化查看版本演变信息，从哪一步的代码更新开始产生分支？
+$ git log --all --oneline --graph
+
+</code></pre>
+<hr>
+<h3 id="author-committer">Author &amp; Committer</h3>
+<ul>
+<li>Author 代表作者</li>
+<li>Committer 代表提交人</li>
+</ul>
+<p>一般情况作者就是提交人。但是当某人非常喜欢项目中master分支的一个commit，他想基于这个commit创建一个temp分支研究，此时为了尊重版权。此时在temp分支中当前Author就是原作者，Commiitter就是研究人。</p>
+<pre><code># 利用gltk图形化界面查看git版本历史
+$ gitk
+
+# 可以查看每一个commit的：
+# 1. Author
+# 2. Committer
+# 3. Parent ： 最早的commit没有parent
+# 4. Child ： 最后的commit没有child
+# 5. Branches ： 拥有这条commit的所有分支
+# 6. Follows
+# 7. Precedes
+
+# 设置View: view ==&gt; New view ==&gt; All refs 
+#  ==&gt; Ok后可以查看所有分支版本演进历史
+</code></pre>
+<hr>
+<h3 id="探究-git-目录"><em><strong>探究 .git 目录</strong></em></h3>
+<pre><code>$ cd .git
+$ ls -al
+total 56
+drwxr-xr-x  14 zhenglongwu  staff  448 Sep 14 20:57 .
+drwxr-xr-x   9 zhenglongwu  staff  288 Sep 12 21:29 ..
+-rw-r--r--   1 zhenglongwu  staff    9 Sep 12 21:09 COMMIT_EDITMSG
+-rw-r--r--   1 zhenglongwu  staff   21 Sep 12 21:06 HEAD
+-rw-r--r--   1 zhenglongwu  staff   41 Sep 12 20:49 ORIG_HEAD
+-rw-r--r--   1 zhenglongwu  staff  184 Sep 12 16:10 config
+-rw-r--r--   1 zhenglongwu  staff   73 Sep 12 16:02 description
+-rw-r--r--   1 zhenglongwu  staff  461 Sep 14 20:57 gitk.cache
+drwxr-xr-x  13 zhenglongwu  staff  416 Sep 12 16:02 hooks
+-rw-r--r--   1 zhenglongwu  staff  792 Sep 12 21:09 index
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 16:02 info
+drwxr-xr-x   4 zhenglongwu  staff  128 Sep 12 19:14 logs
+drwxr-xr-x  28 zhenglongwu  staff  896 Sep 12 21:09 objects
+drwxr-xr-x   4 zhenglongwu  staff  128 Sep 12 16:02 refs
+</code></pre>
+<pre><code># .git/HEAD文件：
+$ cat head
+	ref: refs/heads/temp
+
+# ref代表一个引用，引用到temp分支,继续检查
+$ git branch -av
+	  master 4ba1df1 Move readme.txt to readme.md
+	* temp   f9192c6 Add test
+## *号代表当前的工作区在哪一个分支上
+## 因此HEAD的内容含义代表 我们当前正在工作的Git分支是temp
+
+## 实验： 切换到master分支再查看HEAD文件
+$ git checkout master
+	fatal: this operation must be run in a work tree
+$ cd ..
+$ git checkout master
+	Switched to branch 'master'
+$ cd -
+	/Users/zhenglongwu/Desktop/Programming/Git/git_learning/.git
+$ cat head
+	ref: refs/heads/master
+
+## 备注： git checkout 命令就是切换分支
+## 结论： HEAD的文件内容会根据切换分支而改变，它告诉我们当前正在工作的是哪个分支。
+</code></pre>
+<pre><code># .git/config 文件
+$ cat config
+	[core]
+		repositoryformatversion = 0
+		filemode = true
+		bare = false
+		logallrefupdates = true
+		ignorecase = true
+		precomposeunicode = true
+	[user]
+		name = user1
+		email = 670362192@qq.com
+		
+## Git的local用户名设置就记录在仓库的config文件中。
+## 实验，修改username
+$ vi config
+$ cat config
+	...
+	[user]
+		name = userlong
+		email = 670362192@qq.com
+$ git config --local --list
+	core.repositoryformatversion=0
+	core.filemode=true
+	core.bare=false
+	core.logallrefupdates=true
+	core.ignorecase=true
+	core.precomposeunicode=true
+	user.name=userlong
+	user.email=670362192@qq.com
+$ git config --local user.name
+	userlong
+
+# 反向更改
+$ git config --local user.name 'long'
+$ git config --local user.name
+	long
+$ cat config
+	...
+	[user]
+		name = long
+		email = 670362192@qq.com
+
+## 结论：config文件就是储存所有与本地仓库相关的配置信息。
+</code></pre>
+<pre><code># .git/refs/ 文件夹探究
+$ cd refs
+$ ls -al
+	total 0
+	drwxr-xr-x   4 zhenglongwu  staff  128 Sep 12 16:02 .
+	drwxr-xr-x  14 zhenglongwu  staff  448 Sep 14 21:35 ..
+	drwxr-xr-x   4 zhenglongwu  staff  128 Sep 12 21:09 heads
+	drwxr-xr-x   2 zhenglongwu  staff   64 Sep 12 16:02 tags
+
+## tags也被称作里程碑，比如当前项目开发到V1.0了，可以加一个标签打一个标识
+## heads对应于所有分支，分支代表的是一个独立的开发空间。比如开发软件时有前端开发和后端开发，此时前端可以创建一个分支，后端建一个分支。 彼此在自己的空间里工作是互不影响的。集成时又可以集成到一个公共的分支上。
+
+
+### 再挖 .git/refs/heads/文件夹
+$ cd heads
+$ ls -al
+	total 16
+	drwxr-xr-x  4 zhenglongwu  staff  128 Sep 12 21:09 .
+	drwxr-xr-x  4 zhenglongwu  staff  128 Sep 12 16:02 ..
+	-rw-r--r--  1 zhenglongwu  staff   41 Sep 12 20:52 master
+	-rw-r--r--  1 zhenglongwu  staff   41 Sep 12 21:09 temp
+$ cat master
+	4ba1df1b3b40dae8540c01b81f947a0b4b3d8c1c
+	
+## heads文件夹里存放所有的分支，master文件存的是一个HASH值代表这个master最后一次commit的指针
+$ git cat-file -t 4ba1df1b3b40dae
+	commit
+## cat-file -t 查看当前哈希值的object是什么类型，是一个commit
+
+## 查看当前所有分支最新commit情况
+$ git branch -av
+* master 4ba1df1 Move readme.txt to readme.md
+  temp   f9192c6 Add test
+
+## 4ba1df1是短hash值，一般够用，当短的不够用时（产生重复时）再用更长一点的。
+$ cat temp
+f9192c679da9f6ff44f20c81d1d8ba0fb381193a
+## 同理可看出temp文件里存的也是temp分支中最后一次commit的哈希值
+
+
+### 继续挖 .git/refs/tags/文件夹
+$ cd tags
+$ ls -al
+	total 8
+	drwxr-xr-x  3 zhenglongwu  staff   96 Sep 14 23:41 .
+	drwxr-xr-x  4 zhenglongwu  staff  128 Sep 12 16:02 ..
+	-rw-r--r--  1 zhenglongwu  staff   41 Sep 14 23:41 js01
+
+## 有一个tag：js01， 读它
+$ cat js01
+	b7e1bfaf5787edb14f14981df2d32530792d83fa
+$ git cat-file -t b7e1
+	tag
+## 备注：可以少输入几位hash值，只要能识别出唯一的值。
+## 加-p 深挖这个hash值代表的东西
+$ git cat-file -p b7e1
+	object d4e1729be6ec1d96e1068171e5d355b09ae5e3e7
+	type commit
+	tag js01
+	tagger long &lt;670362192@qq.com&gt; 1568518864 -0400
+
+	js demo
+	
+## 继续挖这个object d4e1729be6ec1d96e1068171e5d355b09ae5e3e7是什么? 是一个commit
+$ git cat-file -t  d4e1
+	commit
+$ git cat-file -p  d4e1
+	tree 9c640279d65a23da23454864b9f96adb59cb3bec
+	parent 7c13cfe19f0c14585b0629c1095b58be53cdc7cc
+	author user1 &lt;670362192@qq.com&gt; 1568334269 -0400
+	committer user1 &lt;670362192@qq.com&gt; 1568334269 -0400
+	
+	Add javasrcipt
+	
+###因此js01文件里存放的hash值代表一个tag，这个tag的hash值里存放了一个对象，这个对象的hash值代表一个commit
+
+</code></pre>
+<ul>
+<li>git cat-file -t HASH值： 读取当前hash值代表的object类型</li>
+<li>git cat-file -p HASH值： 读取当前hash值代表的object里面存放的东西（应该有各种属性和代表其它object的hash值）</li>
+<li>.git/refs/heads： 存放所有分支</li>
+<li>.git/refs/heads/master：master分支最后一次commit的hash值</li>
+<li>.git/refs/heads/temp：temp分支最后一次commit的hash值</li>
+<li>.git/refs/tags： 里程碑，存放对某一次特殊意义commit 的标记</li>
+<li>.git/refs/tags/js01： 名叫js01的标记，该文件记录的hash值里存放了另一个commit对象的hash值，也就是标记的commit。</li>
+</ul>
+<pre><code>## !!重点: .git/objects/ 文件夹的探究
+$ cd objects
+$ ls -al
+total 0
+drwxr-xr-x  29 zhenglongwu  staff  928 Sep 14 23:41 .
+drwxr-xr-x  14 zhenglongwu  staff  448 Sep 14 21:35 ..
+....
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 19:14 77
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 20:17 7c
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 20:24 7f
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 21:09 8c
+....
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 20:29 fb
+drwxr-xr-x   2 zhenglongwu  staff   64 Sep 12 16:02 info
+drwxr-xr-x   2 zhenglongwu  staff   64 Sep 12 16:02 pack
+
+## 可以看出有两种类型的文件夹，
+## 一种是只有2个字母的大部分文件夹
+## 另一种是pack文件夹：Git会做自我梳理过程，当松散文件过多时会打包到这里
+
+
+### 1.先深挖两字符的文件夹 .git/objects/77/
+$ cd 77
+$ ls -al
+total 8
+drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 19:14 .
+drwxr-xr-x  29 zhenglongwu  staff  928 Sep 14 23:41 ..
+-r--r--r--   1 zhenglongwu  staff   55 Sep 12 19:14 37016481fd9dbdf0ec0d9145d56358fd71feb2
+
+##解读：文件夹里有一堆类似hash值得东西：37016481fd9dbdf0ec0d9145d56358fd71feb2。但是它不是完整的hash值，它还缺少开头两个字符--文件夹的名字，因此这串完整的hash值要在开头加上77：
+7737016481fd9dbdf0ec0d9145d56358fd71feb2
+$ git cat-file -t 7737016481
+	tree
+$ git cat-file -p 773701
+	100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391	readme.txt
+## 解读：这串hash值代表一个tree类型的object，里面存放了一个文件 readme.txt。文件的hash值是e69de29bb2d1d6....， 这个文件在git里表示的类型是blob--文件对象。
+
+## 我们再以文件夹7f为例：
+$ ls -al 7f
+	total 8
+	drwxr-xr-x   3 zhenglongwu  staff   96 Sep 12 20:24 .
+	drwxr-xr-x  29 zhenglongwu  staff  928 Sep 14 23:41 ..
+	-r--r--r--   1 zhenglongwu  staff  122 Sep 12 20:24 0153aaaa90651214e53926593e375803742ad5
+$ git cat-file -t 7f0153aaaa
+	tree
+$ git cat-file -p 7f0153aaaa
+	100644 blob c8984ae212db84b4a95e983e0af8e33215c41ec7	.DS_Store
+	100644 blob 230bfa8af0829fdffd7f78bf0dda6b851e482bd8	index.js
+	100644 blob 4d9b3a258759c53e7bc66b6fc554c51e2434437c	jquery.min.js
+
+$ git cat-file -t 230bfa8a
+	blob
+$ git cat-file -p 230bfa8a
+	$(&quot;#switch&quot;).on('click', function () {
+		if ($(&quot;body&quot;).hasClass(&quot;slow-wind&quot;)) {
+			$(&quot;body&quot;).removeClass(&quot;slow-wind&quot;);
+			$(&quot;#switch&quot;).removeClass(&quot;switched&quot;);
+		}
+
+## 结论：blob就是git的文件类型，并且使用git cat-file -p HASH值 可以直接打开文件内的记录内容。
+</code></pre>
+<p>到现在为止接触到的所有Git的数据类型：(也是接触最多的核心4类型)</p>
+<ul>
+<li>commit</li>
+<li>tag</li>
+<li>tree</li>
+<li>blob</li>
+</ul>
+<hr>
+<p>Git目录总结：（常用的）</p>
+<ol>
+<li>./git/HEAD 文件： 当前工作的git仓库分支. 直接修改其内容与 git checkout 命令同样效果。</li>
+<li>./git/config 文件： 当前的local仓库所有分支的配置，直接修改文件内容与 git config --local user.name '' 一样效果</li>
+<li>./git/refs 文件夹： 存放各个分支最新commit 和 tag里程碑信息</li>
+<li>./git/objects 文件夹：存放git中所有的数据对应的hash值。（只要仓库中两文件的内容一模一样，在git眼里它就是一个文件，然后只有一个hash值代表这个文件？）</li>
+</ol>
+<hr>
+<h2 id="commit-tree-blob三个对象之间的关系">commit、tree、blob三个对象之间的关系</h2>
+<p>存储是git的核心技术点。版本管理系统中，文件的变更是非常频繁的，所以设计一个良好文件储存机制对于版本管理系统是非常关键的，否则版本管理会越来越混乱。</p>
+<!--![Git_relation](../../static/image/git_img/commit_tree_blob.png)-->
+<img src="https://raw.githubusercontent.com/ZL-Wu/blogImg/master/git/commit_tree_blob.png"  height="300" width="495">
+<ul>
+<li>一个commit对应且仅对应一颗树， 这颗树代表当前commit对应的一个视图快照，就是在当时那个时间点时，项目所有的文件夹和文件的样子。</li>
+<li>一个commit里包含了一棵树（项目文件夹整体快照），parent（上一个commit），author（作者），committer（提交人）四者的对应Hash值，然后加上commit时的message信息。</li>
+<li>一棵树tree里包含了其它树（文件夹）和 blob（文件）的对应hash值</li>
+<li>其它树tree里依然包含了其它树（子文件夹） 和 blob（文件）的对应hash值</li>
+<li>blob（文件）里仅包含文件的内容</li>
+</ul>
+<p>因此：</p>
+<p>commit仅储存快照tree，parent，author，committer的hash值 和 commit时附加的解释信息</p>
+<p>tree中仅储存 tree 和 blob 的 hash值</p>
+<p>blob中就储存 文件的内容信息。（通过blob的hash值读文件）（注意，blob和文件名一点关系都没有，只要文件的内容相同，不管文件名叫什么，都只是一个东西）</p>
+<pre><code># 代码实验
+
+$ git branch -av
+* master 4ba1df1 Move readme.txt to readme.md
+  temp   f9192c6 Add test
+$ git log
+	...
+	commit d4e1729be6ec1d96e1068171e5d355b09ae5e3e7 (tag: js01)
+	Author: user1 &lt;670362192@qq.com&gt;
+	Date:   Thu Sep 12 20:24:29 2019 -0400
+	
+	    Add javasrcipt
+	
+	...
+
+# 读取commit的hash值
+$ git cat-file -p d4e1729be6ec
+	tree 9c640279d65a23da23454864b9f96adb59cb3bec
+	parent 7c13cfe19f0c14585b0629c1095b58be53cdc7cc
+	author user1 &lt;670362192@qq.com&gt; 1568334269 -0400
+	committer user1 &lt;670362192@qq.com&gt; 1568334269 -0400
+	
+	Add javasrcipt
+
+$ ls .git/objects/d4
+	e1729be6ec1d96e1068171e5d355b09ae5e3e7
+
+# 读取tree的hash值
+$ git cat-file -p 9c640279d6
+	040000 tree e4addc26befad478e734cb7f6919cde05fe70aa6	css
+	100644 blob 726ecbd247e7b0156bf6a5e39dc9ce0b1048818c	index.html
+	040000 tree 7f0153aaaa90651214e53926593e375803742ad5	javascript
+	100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391	readme.txt
+	
+$ ls .git/objects/9c
+	640279d65a23da23454864b9f96adb59cb3bec
+
+# 读取blob的hash值
+$ git cat-file -p 726ecbd247
+	&lt;!DOCTYPE html&gt;
+	&lt;html lang=&quot;en&quot; &gt;
+	&lt;head&gt;
+	  &lt;meta charset=&quot;UTF-8&quot;&gt;
+	...
+	&lt;/body&gt;
+	&lt;/html&gt;
+	
+$ ls .git/objects/72
+	6ecbd247e7b0156bf6a5e39dc9ce0b1048818c
+
+</code></pre>
+<h2 id="git-命令深度解析数一数tree的个数">Git 命令深度解析（数一数tree的个数）</h2>
+<pre><code># 建立仓库
+$ git init count_tree
+$ cd count_tree
+$ ls -al .git/objects
+	total 0
+	drwxr-xr-x   4 zhenglongwu  staff  128 Sep 18 23:22 .
+	drwxr-xr-x  10 zhenglongwu  staff  320 Sep 18 23:22 ..
+	drwxr-xr-x   2 zhenglongwu  staff   64 Sep 18 23:22 info
+	drwxr-xr-x   2 zhenglongwu  staff   64 Sep 18 23:22 pack
+
+## 空仓库，没有任何对象
+## 创建一个文件夹doc
+$ mkdir doc
+$ ls
+	doc
+$ git status
+	On branch master
+	No commits yet
+	nothing to commit (create/copy files and use &quot;git add&quot; to track)
+$ git add doc
+$ git status
+	On branch master
+	No commits yet
+	nothing to commit (create/copy files and use &quot;git add&quot; to track)
+$ ls -al .git/objects
+	total 0
+	drwxr-xr-x   4 zhenglongwu  staff  128 Sep 18 23:22 .
+	drwxr-xr-x  10 zhenglongwu  staff  320 Sep 18 23:22 ..
+	drwxr-xr-x   2 zhenglongwu  staff   64 Sep 18 23:22 info
+	drwxr-xr-x   2 zhenglongwu  staff   64 Sep 18 23:22 pack
+
+## ==&gt; 空文件夹不是对象, add后也没有效果
+## 在文件夹doc内创建文件
+$ cd doc
+$ echo 'hello world'&gt;readme.txt
+$ ls
+	readme.txt
+$ cat readme.txt
+	hello world
+$ cd ..
+$ git status
+	On branch master
+	No commits yet
+	Untracked files:
+	  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+		doc/
+	nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+$ ls -al .git/objects
+	total 0
+	drwxr-xr-x   4 zhenglongwu  staff  128 Sep 18 23:22 .
+	drwxr-xr-x  10 zhenglongwu  staff  320 Sep 18 23:37 ..
+	drwxr-xr-x   2 zhenglongwu  staff   64 Sep 18 23:22 info
+	drwxr-xr-x   2 zhenglongwu  staff   64 Sep 18 23:22 pack
+
+## 在doc文件内创建了文件readme.txt，git status出现untracked文件，Git系统依然没有创建对象。
+## push给Git系统
+$ git add doc
+$ git status
+	On branch master
+	No commits yet
+	Changes to be committed:
+	  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+		new file:   doc/readme.txt
+
+$ ls -al .git/objects
+	total 0
+	drwxr-xr-x   5 zhenglongwu  staff  160 Sep 18 23:44 .
+	drwxr-xr-x  11 zhenglongwu  staff  352 Sep 18 23:44 ..
+	drwxr-xr-x   3 zhenglongwu  staff   96 Sep 18 23:44 a0
+	...
+$ ls -al .git/objects/a0
+	total 8
+	drwxr-xr-x  3 zhenglongwu  staff   96 Sep 18 23:44 .
+	drwxr-xr-x  5 zhenglongwu  staff  160 Sep 18 23:44 ..
+	-r--r--r--  1 zhenglongwu  staff   29 Sep 18 23:44 423896973644771497bdc03eb99d5281615b51
+$ git cat-file -t a0423896973
+	blob
+$ git cat-file -p a0423896973
+	hello world!
+
+
+#### 中途小结：
+#### 1.创建空文件夹，Git系统不会有任何变化或提示。
+#### 2.在空文件夹内部创建文本文件后，包括文件夹在内Git系统出现untracked file提示, .git/objects中没有创建对象
+#### 3.将包含文件的文件夹一起git add后，.git/objects中出现blob对象，即创建的文件。
+#### 4.问：git commit之后呢？会有多少创建对象？
+
+## 实验git commit
+$ git commit -m'Add readme'
+	[master (root-commit) 4ce2739] Add readme
+	 1 file changed, 1 insertion(+)
+	 create mode 100644 doc/readme.txt
+$ git status
+	On branch master
+	nothing to commit, working tree clean
+$ git log
+	commit 4ce2739c6af63445b694ef10323fd9c5ece775c2 (HEAD -&gt; master)
+	Author: zhenglong &lt;wzhenglong@yahoo.com&gt;
+	Date:   Wed Sep 18 23:55:02 2019 -0400
+	    Add readme
+$ git log --oneline
+	4ce2739 (HEAD -&gt; master) Add readme
+
+$ ls -al .git/objects
+	total 0
+	...
+	drwxr-xr-x   3 zhenglongwu  staff   96 Sep 18 23:55 32
+	drwxr-xr-x   3 zhenglongwu  staff   96 Sep 18 23:55 4c
+	drwxr-xr-x   3 zhenglongwu  staff   96 Sep 18 23:55 7e
+	drwxr-xr-x   3 zhenglongwu  staff   96 Sep 18 23:44 a0
+	...
+	
+## 比之前的a0文件夹多了32，4c和7e三个文件夹
+## 32文件夹是什么呢？
+$ ls -al .git/objects/32
+	total 8
+	...
+	-r--r--r--  1 zhenglongwu  staff   45 Sep 18 23:55 dd8f7c4977eab3ac25d95abefbfa781e58abc7
+$ git cat-file -t 32dd8
+	tree
+$ git cat-file -p 32dd8
+	040000 tree 7e007f7273ba9497e7595b1f84875163f9a8903d	doc
+$ git cat-file -p 7e007
+	100644 blob a0423896973644771497bdc03eb99d5281615b51	readme.txt
+$ git cat-file -p a0423
+	hello world!
+	
+## 4c文件夹是什么呢？
+$ ls -al .git/objects/4c
+	total 8
+	...
+	-r--r--r--  1 zhenglongwu  staff  126 Sep 18 23:55 e2739c6af63445b694ef10323fd9c5ece775c2
+$ git cat-file -t 4ce27
+	commit
+$ git cat-file -p 4ce27
+	tree 32dd8f7c4977eab3ac25d95abefbfa781e58abc7
+	author zhenglong &lt;wzhenglong@yahoo.com&gt; 1568865302 -0400
+	committer zhenglong &lt;wzhenglong@yahoo.com&gt; 1568865302 -0400
+	Add readme
+	
+## 32dd8..就是上面doc的父文件夹的hash值
+## 7e文件夹是什么呢？
+$ ls -al .git/objects/7e
+	total 8
+	...
+	-r--r--r--  1 zhenglongwu  staff   55 Sep 18 23:55 007f7273ba9497e7595b1f84875163f9a8903d
+$ git cat-file -t 7e007
+	tree
+$ git cat-file -p 7e007
+	100644 blob a0423896973644771497bdc03eb99d5281615b51	readme.txt
+$ git cat-file -p a0423
+	hello world!
+
+
+#### 小结4
+#### 1.仓库没有任何commits前，git status：No commits yet. nothing to commit (create/copy files and use &quot;git add&quot; to track)
+#### 2.仓库有commits后，git status：nothing to commit, working tree clean
+#### 3.仓库commits后, git创建的objects有：
+##### a. 32dd8 tree =&gt; doc的父文件夹 [count_tree] （内容: 一个7e007的tree --&gt; doc）
+##### b. 7e007 tree =&gt; readme.txt的父文件夹 [doc]  (内容：一个a0423的blob --&gt; readme.txt)
+##### c. a0423 blob =&gt; (内容：hello world)
+##### d. 4ce27 commit =&gt; (内容：tree 32dd8 的commit记录)
+
+#### 完整总结--Git内部行为分析
+   用户行为					Git行为
+1. git init				创建空仓库环境
+2. 创建空文件夹doc			无反应
+3. 写入一个文件				Git出现untracked file提示
+4. git add 文件			Git创建blob对象a0423 (readme.txt)
+5. git commit				Git创建commit对象4ce27 (add readme)
+									tree对象32dd8 (count_tree)
+									tree对象7e007 (doc)
+</code></pre>
+<h2 id="分离头指针注意事项">分离头指针注意事项？</h2>
+<ul>
+<li>git checkout 到空分支后，即不指定从哪一个commit开始分支</li>
+<li>在这个空分支git add甚至git commit后切回原master分支将丢失在空分支的所有新操作。</li>
+<li>所有的新操作必须绑定在一个当前指定的一个分支上才行。否则文件丢失。</li>
+<li>所有的hash值都是一个指针，指向它的内存空间地址。通过Git解读hash值可以阅读当前的对象的任何信息。</li>
+</ul>
+<h2 id="进一步理解head和branch">进一步理解head和branch</h2>
+
+                </div>
+            </article>
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">不废话，就是干</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://zl-wu.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

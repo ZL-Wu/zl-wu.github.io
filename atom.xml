@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zl-wu.github.io</id>
     <title>ZL Wu&apos;s notebook</title>
-    <updated>2021-01-22T17:34:28.248Z</updated>
+    <updated>2021-01-22T18:05:56.244Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zl-wu.github.io"/>
     <link rel="self" href="https://zl-wu.github.io/atom.xml"/>
@@ -109,6 +109,17 @@
         <summary type="html"><![CDATA[<p>&quot;Priori Probability + data = Posterior probability&quot;</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>&quot;Priori Probability + data = Posterior probability&quot;</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python code of binomial distribution]]></title>
+        <id>https://zl-wu.github.io/post/python-code-of-binomial-distribution/</id>
+        <link href="https://zl-wu.github.io/post/python-code-of-binomial-distribution/">
+        </link>
+        <updated>2020-04-19T17:57:30.000Z</updated>
+        <summary type="html"><![CDATA[<p>&quot;python code to play with binomial distribution&quot;</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>&quot;python code to play with binomial distribution&quot;</p>
 ]]></content>
     </entry>
 </feed>

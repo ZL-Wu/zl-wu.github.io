@@ -1,0 +1,526 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Compare nltk and textblob&#39;s sentiment analysis | ZL Wu&#39;s notebook</title>
+
+<link rel="shortcut icon" href="https://zl-wu.github.io/favicon.ico?v=1611338682495">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zl-wu.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<style>
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <style>
+    /* 导航栏样式 */
+    .navbar {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand {
+        display: inline-block;
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        line-height: inherit;
+        white-space: nowrap;
+    }
+
+    .navbar-brand:hover,
+    .navbar-brand:focus {
+        text-decoration: none;
+    }
+
+    .navbar-nav {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .navbar-collapse {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .navbar-toggler {
+        padding: 0.25rem 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .navbar-toggler:hover,
+    .navbar-toggler:focus {
+        text-decoration: none;
+    }
+
+    @media (min-width: 992px) {
+        .navbar-expand-lg {
+            -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+        }
+
+        .navbar-expand-lg .navbar-nav {
+            -ms-flex-direction: row;
+            flex-direction: row;
+        }
+
+        .navbar-expand-lg .navbar-collapse {
+            display: -ms-flexbox !important;
+            display: flex !important;
+            -ms-flex-preferred-size: auto;
+            flex-basis: auto;
+        }
+
+        .navbar-expand-lg .navbar-toggler {
+            display: none;
+        }
+    }
+
+    @media (max-width: 991px) {
+        #navbarSupportedContent {
+            display: none;
+        }
+    }
+</style>
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            ZL Wu&#39;s notebook
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1611338682495"
+                action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = function () {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Compare nltk and textblob&#39;s sentiment analysis
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-21 ·
+                    </time>
+                    
+                        <a href="https://zl-wu.github.io/tag/krjdQmA74/" class="post-tags">
+                            # NLP
+                        </a>
+                    
+                        <a href="https://zl-wu.github.io/tag/8gpF3Gc2sD/" class="post-tags">
+                            # Source Code
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>&quot;This is a comparison report between nltk and textblob in sentiment analysis.&quot;</p>
+<!-- more -->
+<h2 id="overview">Overview</h2>
+<h2 id="lexicon">lexicon</h2>
+<h4 id="1-nltks-vader_lexicontxt-nltks-default-lexicon-file-online-source">1. NLTK's vader_lexicon.txt : NLTK's default lexicon file <a href="https://github.com/nltk/nltk_data/tree/gh-pages/packages/sentiment">(online source)</a></h4>
+<pre><code># Part of vader_lexicon.txt
+....
+# emoticon
+(-*	1.3	1.26886	[4, 1, 2, 0, 2, -1, 1, 2, 1, 1]
+(-:	1.6	0.8	[2, 2, 1, 3, 1, 1, 1, 3, 1, 1]
+(-:0	2.8	0.87178	[3, 2, 3, 4, 3, 2, 3, 1, 4, 3]
+(-:&lt;	-0.4	2.15407	[-3, 3, -1, -1, 2, -1, -2, 3, -3, -1]
+(-:o	1.5	0.67082	[3, 1, 1, 2, 2, 2, 1, 1, 1, 1]
+(-:O	1.5	0.67082	[3, 1, 1, 2, 2, 2, 1, 1, 1, 1]
+(-:{	-0.1	1.57797	[-2, -3, 1, -2, 1, 1, 0, 0, 2, 1]
+(-:|&gt;*	1.9	0.83066	[3, 2, 2, 1, 0, 2, 3, 2, 2, 2]
+(-;	1.3	1.18743	[3, 2, 3, 0, 1, -1, 1, 2, 1, 1]
+(-;|	2.1	1.13578	[3, 2, 2, 4, 1, 1, 1, 4, 2, 1]
+(8	2.6	1.0198	[4, 2, 1, 3, 3, 3, 3, 1, 2, 4]
+.... 
+# word
+cheer	2.3	0.64031	[2, 1, 2, 2, 2, 3, 3, 3, 2, 3]
+cheered	2.3	0.78102	[2, 3, 3, 4, 2, 1, 2, 2, 2, 2]
+cheerer	1.7	0.45826	[1, 2, 2, 2, 1, 1, 2, 2, 2, 2]
+cheerers	1.8	0.87178	[2, 2, 3, 2, 1, 2, 0, 1, 3, 2]
+cheerful	2.5	0.67082	[3, 2, 3, 2, 2, 2, 4, 2, 3, 2]
+cheerfuller	1.9	0.83066	[3, 3, 2, 3, 2, 1, 1, 2, 1, 1]
+cheerfullest	3.2	0.87178	[4, 4, 4, 4, 3, 2, 2, 3, 2, 4]
+cheerfully	2.1	0.83066	[3, 2, 2, 2, 1, 3, 1, 3, 1, 3]
+cheerfulness	2.1	0.9434	[3, 2, 1, 2, 3, 4, 1, 2, 1, 2]
+cheerier	2.6	0.4899	[2, 2, 3, 3, 2, 3, 3, 2, 3, 3]
+cheeriest	2.2	0.6	[3, 2, 3, 1, 2, 2, 3, 2, 2, 2]
+....
+</code></pre>
+<pre><code class="language-python"># load lexicon in Python
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+analyzer = SentimentIntensityAnalyzer()
+type(analyzer.lexicon)      # dict
+len(analyzer.lexicon)       # 7502
+analyzer.lexicon
+
+'''
+output:
+{ 
+ ...
+ '(-*': 1.3,
+ '(-:': 1.6,
+ '(-:0': 2.8,
+ '(-:&lt;': -0.4,
+ '(-:o': 1.5,
+ '(-:O': 1.5,
+ '(-:{': -0.1,
+ '(-:|&gt;*': 1.9,
+ '(-;': 1.3,
+ '(-;|': 2.1,
+ '(8': 2.6,
+ ...
+}
+'''     
+</code></pre>
+<h4 id="2-textblobs-en-sentimentxml-textblobs-default-lexicon-file-online-source">2. TextBlob's en-sentiment.xml : TextBlob's default lexicon file <a href="https://github.com/sloria/TextBlob/blob/dev/textblob/en/en-sentiment.xml">(online source)</a></h4>
+<pre><code class="language-xml">&lt;sentiment language=&quot;en&quot; version=&quot;1.3&quot; author=&quot;Tom De Smedt, Walter Daelemans&quot; license=&quot;PDDL&quot;&gt;
+&lt;word form=&quot;13th&quot; wordnet_id=&quot;a-02203763&quot; pos=&quot;JJ&quot; sense=&quot;coming next after the twelfth in position&quot; polarity=&quot;0.0&quot; subjectivity=&quot;0.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;20th&quot; cornetto_synset_id=&quot;n_a-531612&quot; wordnet_id=&quot;a-02204716&quot; pos=&quot;JJ&quot; sense=&quot;coming next after the nineteenth in position&quot; polarity=&quot;0.0&quot; subjectivity=&quot;0.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;21st&quot; wordnet_id=&quot;a-02204823&quot; pos=&quot;JJ&quot; sense=&quot;coming next after the twentieth in position&quot; polarity=&quot;0.0&quot; subjectivity=&quot;0.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;2nd&quot; wordnet_id=&quot;a-02202146&quot; pos=&quot;JJ&quot; sense=&quot;coming next after the first in position in space or time or degree or magnitude&quot; polarity=&quot;0.0&quot; subjectivity=&quot;0.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;3rd&quot; cornetto_synset_id=&quot;n_a-530634&quot; wordnet_id=&quot;a-02202307&quot; pos=&quot;JJ&quot; sense=&quot;coming next after the second and just before the fourth in position&quot; polarity=&quot;0.0&quot; subjectivity=&quot;0.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;abhorrent&quot; wordnet_id=&quot;a-1625063&quot; pos=&quot;JJ&quot; sense=&quot;offensive to the mind&quot; polarity=&quot;-0.7&quot; subjectivity=&quot;0.8&quot; intensity=&quot;1.0&quot; reliability=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;able&quot; cornetto_synset_id=&quot;n_a-534450&quot; wordnet_id=&quot;a-01017439&quot; pos=&quot;JJ&quot; sense=&quot;having a strong healthy body&quot; polarity=&quot;0.5&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;able&quot; wordnet_id=&quot;a-00001740&quot; pos=&quot;JJ&quot; sense=&quot;(usually followed by 'to') having the necessary means or skill or know-how or authority to do something&quot; polarity=&quot;0.5&quot; subjectivity=&quot;0.5&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+....
+&lt;word form=&quot;implicit in&quot; cornetto_synset_id=&quot;n_a-520863&quot; wordnet_id=&quot;a-00941940&quot; pos=&quot;JJ&quot; sense=&quot;in the nature of something though not readily apparent&quot; polarity=&quot;0.0&quot; subjectivity=&quot;0.1&quot; intensity=&quot;1.0&quot; confidence=&quot;0.8&quot; /&gt;
+&lt;word form=&quot;important&quot; cornetto_synset_id=&quot;d_a-9178&quot; wordnet_id=&quot;a-01830403&quot; pos=&quot;JJ&quot; sense=&quot;having authority or ascendancy or influence&quot; polarity=&quot;0.5&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;important&quot; cornetto_synset_id=&quot;n_a-527688&quot; wordnet_id=&quot;a-02161432&quot; pos=&quot;JJ&quot; sense=&quot;important in effect or meaning&quot; polarity=&quot;0.5&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;important&quot; wordnet_id=&quot;a-00655779&quot; pos=&quot;JJ&quot; sense=&quot;of extreme importance&quot; polarity=&quot;0.0&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;important&quot; wordnet_id=&quot;a-01275562&quot; pos=&quot;JJ&quot; sense=&quot;of great significance or value&quot; polarity=&quot;0.5&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;important&quot; wordnet_id=&quot;a-01539887&quot; pos=&quot;JJ&quot; sense=&quot;having or suggesting a consciousness of high position&quot; polarity=&quot;0.5&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;impossible&quot; cornetto_synset_id=&quot;n_a-511166&quot; wordnet_id=&quot;a-02418692&quot; pos=&quot;JJ&quot; sense=&quot;totally unlikely&quot; polarity=&quot;-0.5&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;impossible&quot; cornetto_synset_id=&quot;n_a-521243&quot; wordnet_id=&quot;a-02436025&quot; pos=&quot;JJ&quot; sense=&quot;used of persons or their behavior&quot; polarity=&quot;-1.0&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;impossible&quot; wordnet_id=&quot;a-01823092&quot; pos=&quot;JJ&quot; sense=&quot;not capable of occurring or being accomplished or dealt with&quot; polarity=&quot;-0.5&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;impressed&quot; cornetto_synset_id=&quot;n_a-509653&quot; wordnet_id=&quot;a-00071142&quot; pos=&quot;JJ&quot; sense=&quot;deeply or markedly affected or influenced&quot; polarity=&quot;1.0&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;impressive&quot; cornetto_synset_id=&quot;n_a-524894&quot; wordnet_id=&quot;a-00835292&quot; pos=&quot;JJ&quot; sense=&quot;producing a strong effect&quot; polarity=&quot;1.0&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;impressive&quot; wordnet_id=&quot;a-01282014&quot; pos=&quot;JJ&quot; sense=&quot;making a strong or vivid impression&quot; polarity=&quot;1.0&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.9&quot; /&gt;
+&lt;word form=&quot;in good taste&quot; cornetto_synset_id=&quot;n_a-528044&quot; wordnet_id=&quot;a-00689215&quot; pos=&quot;JJ&quot; sense=&quot;satisfying generally accepted social or esthetic standards&quot; polarity=&quot;0.9&quot; subjectivity=&quot;1.0&quot; intensity=&quot;1.0&quot; confidence=&quot;0.8&quot; /&gt;
+&lt;word form=&quot;in stock&quot; cornetto_synset_id=&quot;n_a-533683&quot; wordnet_id=&quot;a-00184543&quot; pos=&quot;JJ&quot; sense=&quot;available for use or sale&quot; polarity=&quot;0.1&quot; subjectivity=&quot;0.4&quot; intensity=&quot;1.0&quot; confidence=&quot;0.8&quot; /&gt;
+....
+&lt;/sentiment&gt;
+</code></pre>
+<pre><code class="language-python"># load lexicon in Python
+from textblob.en import sentiment as pattern_sentiment
+type(pattern_sentiment)         # textblob.en.Sentiment
+len(pattern_sentiment)          # 2860
+pattern_sentiment['great']      # {'JJ': [0.8, 0.75, 1.0], None: [0.8, 0.75, 1.0]}
+pattern_sentiment('great')      # (0.8, 0.75)
+for k,v in pattern_sentiment.items():
+    print(k,v)
+
+'''
+output:
+13th {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+20th {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+21st {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+2nd {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+3rd {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+abhorrent {'JJ': [-0.7, 0.8, 1.0], None: [-0.7, 0.8, 1.0]}
+able {'JJ': [0.5, 0.625, 1.0], None: [0.5, 0.625, 1.0]}
+above {'JJ': [0.0, 0.1, 1.0], None: [0.0, 0.1, 1.0]}
+....
+13th {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+20th {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+21st {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+2nd {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+3rd {'JJ': [0.0, 0.0, 1.0], None: [0.0, 0.0, 1.0]}
+abhorrent {'JJ': [-0.7, 0.8, 1.0], None: [-0.7, 0.8, 1.0]}
+able {'JJ': [0.5, 0.625, 1.0], None: [0.5, 0.625, 1.0]}
+above {'JJ': [0.0, 0.1, 1.0], None: [0.0, 0.1, 1.0]}
+....
+'''
+</code></pre>
+<h4 id="summary">Summary</h4>
+<hr>
+<h2 id="main-algorithm">Main Algorithm</h2>
+<h4 id="1-nltks-methods">1. NLTK's methods</h4>
+<ul>
+<li><a href="https://github.com/nltk/nltk/blob/develop/nltk/sentiment/vader.py#L589">score_valence(self, sentiments, text)</a></li>
+</ul>
+<pre><code class="language-python">def score_valence(self, sentiments, text):
+    if sentiments:
+        ''' calculate compound value '''
+        sum_s = float(sum(sentiments))
+        # compute and add emphasis from punctuation in text
+        punct_emph_amplifier = self._punctuation_emphasis(sum_s, text)
+        if sum_s &gt; 0:
+            sum_s += punct_emph_amplifier
+        elif sum_s &lt; 0:
+            sum_s -= punct_emph_amplifier
+        compound = self.constants.normalize(sum_s)
+
+        ''' calculate positive, negative and neutral values respectively '''
+        pos_sum, neg_sum, neu_count = self._sift_sentiment_scores(sentiments)
+        if pos_sum &gt; math.fabs(neg_sum):
+            pos_sum += punct_emph_amplifier
+        elif pos_sum &lt; math.fabs(neg_sum):
+            neg_sum -= punct_emph_amplifier
+        total = pos_sum + math.fabs(neg_sum) + neu_count
+        pos = math.fabs(pos_sum / total)
+        neg = math.fabs(neg_sum / total)
+        neu = math.fabs(neu_count / total)
+    else:
+        compound = 0.0
+        pos = 0.0
+        neg = 0.0
+        neu = 0.0
+    sentiment_dict = {
+        &quot;neg&quot;: round(neg, 3),
+        &quot;neu&quot;: round(neu, 3),
+        &quot;pos&quot;: round(pos, 3),
+        &quot;compound&quot;: round(compound, 4),
+    }
+    return sentiment_dict
+</code></pre>
+<p>Parameter <strong>sentiments</strong> is a list of sentiment values corresponding to <strong>each token</strong> in the text.</p>
+<p>In brief, NLTK first <strong>sums up all individual words' sentiment values</strong> (positive real numbers and negative real numbers), then performs a text <strong>puctuation statistical emphasis</strong> operation, and finally <strong>normalizes the final result</strong> to obtain the <u>&quot;<em><strong>Compound</strong></em>&quot;</u> value.</p>
+<p>And NLTK uses the _sift_sentiment_scores method to get three values of pos, neg, and neu. We will look at this method later. <strong>Pos, neg, and neu</strong> have also undergone <strong>puctuation statistical emphasis</strong>.</p>
+<ul>
+<li><a href="https://github.com/nltk/nltk/blob/develop/nltk/sentiment/vader.py#L381">sentiment_valence(self, valence, sentitext, item, i, sentiments)</a></li>
+</ul>
+<pre><code class="language-python">def sentiment_valence(self, valence, sentitext, item, i, sentiments):
+    is_cap_diff = sentitext.is_cap_diff
+    words_and_emoticons = sentitext.words_and_emoticons
+    item_lowercase = item.lower()
+    if item_lowercase in self.lexicon:
+        # get the sentiment valence
+        valence = self.lexicon[item_lowercase]
+
+        # Rule 1 : check if sentiment laden word is in ALL CAPS (while others aren't)
+        if item.isupper() and is_cap_diff:
+            if valence &gt; 0:
+                valence += self.constants.C_INCR
+            else:
+                valence -= self.constants.C_INCR
+
+        # Context Rules
+        for start_i in range(0, 3):
+            if (
+                i &gt; start_i
+                and words_and_emoticons[i - (start_i + 1)].lower()
+                not in self.lexicon
+            ):
+                # dampen the scalar modifier of preceding words and emoticons
+                # (excluding the ones that immediately preceed the item) based
+                # on their distance from the current item.
+                # Rule 2 : preceding booster word
+                s = self.constants.scalar_inc_dec(
+                    words_and_emoticons[i - (start_i + 1)], valence, is_cap_diff
+                )
+                if start_i == 1 and s != 0:
+                    s = s * 0.95
+                if start_i == 2 and s != 0:
+                    s = s * 0.9
+                valence = valence + s
+                # Rule 3 : preceding &quot;never&quot; word
+                valence = self._never_check(
+                    valence, words_and_emoticons, start_i, i
+                )
+                # Rule 4 : idioms check
+                if start_i == 2:
+                    valence = self._idioms_check(valence, words_and_emoticons, i)
+
+        # Rule 5 : check for negation case using &quot;least&quot;
+        valence = self._least_check(valence, words_and_emoticons, i)
+
+    sentiments.append(valence)
+    return sentiments
+</code></pre>
+<p><strong>sentiment_valence</strong> is a method of calculating and adjusting the sentiment value of a single word. It is based on multiple rules. First the word has to be in the lexicon databse. After obtaining the basic sentiment value of the word, adjust the sentiment value of the current word again according to the <strong>ALL CAPS emphasis, the preceding booster word, &quot;never&quot;, idioms, and &quot;least&quot;.</strong></p>
+<ul>
+<li><a href="https://github.com/nltk/nltk/blob/develop/nltk/sentiment/vader.py#L353">polarity_scores(self, text)</a></li>
+</ul>
+<pre><code class="language-python">def polarity_scores(self, text):
+    &quot;&quot;&quot;
+    Return a float for sentiment strength based on the input text.
+    Positive values are positive valence, negative value are negative
+    valence.
+    &quot;&quot;&quot;
+    # text, words_and_emoticons, is_cap_diff = self.preprocess(text)
+    sentitext = SentiText(text, self.constants.PUNC_LIST,
+                            self.constants.REGEX_REMOVE_PUNCTUATION)
+    sentiments = []
+    words_and_emoticons = sentitext.words_and_emoticons
+    for item in words_and_emoticons:
+        valence = 0
+        i = words_and_emoticons.index(item)
+        if (
+            i &lt; len(words_and_emoticons) - 1
+            and item.lower() == &quot;kind&quot;
+            and words_and_emoticons[i + 1].lower() == &quot;of&quot;
+        ) or item.lower() in self.constants.BOOSTER_DICT:
+            sentiments.append(valence)
+            continue
+
+        sentiments = self.sentiment_valence(valence, sentitext, item, i, sentiments)
+
+    sentiments = self._but_check(words_and_emoticons, sentiments)
+
+    return self.score_valence(sentiments, text)
+</code></pre>
+<p>After obtaining the list of sentiment values, <strong>&quot;but check&quot;</strong> rule is also performed.</p>
+<h4 id="2-textblobs-methods">2. TextBlob's methods</h4>
+<pre><code>
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://zl-wu.github.io/post/text-analysis-nltks-vader-library/" class="post-title gt-a-link">
+                    Text Analysis -- NLTK&#39;s vader library
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">不废话，就是干</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://zl-wu.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

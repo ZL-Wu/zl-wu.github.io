@@ -1,0 +1,811 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Text Analysis -- TextBlob sentiment | ZL Wu&#39;s notebook</title>
+
+<link rel="shortcut icon" href="https://zl-wu.github.io/favicon.ico?v=1611338682495">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zl-wu.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<style>
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <style>
+    /* 导航栏样式 */
+    .navbar {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand {
+        display: inline-block;
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        line-height: inherit;
+        white-space: nowrap;
+    }
+
+    .navbar-brand:hover,
+    .navbar-brand:focus {
+        text-decoration: none;
+    }
+
+    .navbar-nav {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .navbar-collapse {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .navbar-toggler {
+        padding: 0.25rem 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .navbar-toggler:hover,
+    .navbar-toggler:focus {
+        text-decoration: none;
+    }
+
+    @media (min-width: 992px) {
+        .navbar-expand-lg {
+            -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+        }
+
+        .navbar-expand-lg .navbar-nav {
+            -ms-flex-direction: row;
+            flex-direction: row;
+        }
+
+        .navbar-expand-lg .navbar-collapse {
+            display: -ms-flexbox !important;
+            display: flex !important;
+            -ms-flex-preferred-size: auto;
+            flex-basis: auto;
+        }
+
+        .navbar-expand-lg .navbar-toggler {
+            display: none;
+        }
+    }
+
+    @media (max-width: 991px) {
+        #navbarSupportedContent {
+            display: none;
+        }
+    }
+</style>
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            ZL Wu&#39;s notebook
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1611338682495"
+                action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = function () {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Text Analysis -- TextBlob sentiment
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-19 ·
+                    </time>
+                    
+                        <a href="https://zl-wu.github.io/tag/krjdQmA74/" class="post-tags">
+                            # NLP
+                        </a>
+                    
+                        <a href="https://zl-wu.github.io/tag/8gpF3Gc2sD/" class="post-tags">
+                            # Source Code
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>&quot;Topic: How to calculate sentiment value in TextBlob library?&quot;</p>
+<!-- more -->
+<h2 id="topic-how-to-calculate-sentiment-value-in-textblob-library">Topic: How to calculate sentiment value in TextBlob library?</h2>
+<h2 id="a-simple-example-code">A Simple Example Code</h2>
+<pre><code class="language-python">from textblob import TextBlob
+
+TextBlob(text).sentiment[0]
+</code></pre>
+<h2 id="class-textblobbaseblob-source-code">Class TextBlob(BaseBlob) <a href="https://github.com/sloria/TextBlob/blob/dev/textblob/blob.py#L620">source code</a></h2>
+<pre><code class="language-python"># textblob/blob.py
+
+class TextBlob(BaseBlob):
+    &quot;&quot;&quot;A general text block, meant for larger bodies of text (esp. those
+    containing sentences). Inherits from :class:`BaseBlob &lt;BaseBlob&gt;`.
+    :param str text: A string.
+    :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to
+        :class:`WordTokenizer() &lt;textblob.tokenizers.WordTokenizer&gt;`.
+    :param np_extractor: (optional) An NPExtractor instance. If ``None``,
+        defaults to :class:`FastNPExtractor() &lt;textblob.en.np_extractors.FastNPExtractor&gt;`.
+    :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to
+        :class:`NLTKTagger &lt;textblob.en.taggers.NLTKTagger&gt;`.
+    :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to
+        :class:`PatternAnalyzer &lt;textblob.en.sentiments.PatternAnalyzer&gt;`.
+    :param classifier: (optional) A classifier.
+    &quot;&quot;&quot;
+
+    @cached_property
+    def sentences(self):
+        &quot;&quot;&quot;Return list of :class:`Sentence &lt;Sentence&gt;` objects.&quot;&quot;&quot;
+        return self._create_sentence_objects()
+
+    @cached_property
+    def words(self):
+        &quot;&quot;&quot;Return a list of word tokens. This excludes punctuation characters.
+        If you want to include punctuation characters, access the ``tokens``
+        property.
+        :returns: A :class:`WordList &lt;WordList&gt;` of word tokens.
+        &quot;&quot;&quot;
+        return WordList(word_tokenize(self.raw, include_punc=False))
+
+    @property
+    def raw_sentences(self):
+        &quot;&quot;&quot;List of strings, the raw sentences in the blob.&quot;&quot;&quot;
+        return [sentence.raw for sentence in self.sentences]
+
+    @property
+    def serialized(self):
+        &quot;&quot;&quot;Returns a list of each sentence's dict representation.&quot;&quot;&quot;
+        return [sentence.dict for sentence in self.sentences]
+
+    def to_json(self, *args, **kwargs):
+        '''Return a json representation (str) of this blob.
+        Takes the same arguments as json.dumps.
+        .. versionadded:: 0.5.1
+        '''
+        return json.dumps(self.serialized, *args, **kwargs)
+
+    @property
+    def json(self):
+        '''The json representation of this blob.
+        .. versionchanged:: 0.5.1
+            Made ``json`` a property instead of a method to restore backwards
+            compatibility that was broken after version 0.4.0.
+        '''
+        return self.to_json()
+
+    def _create_sentence_objects(self):
+        '''Returns a list of Sentence objects from the raw text.
+        '''
+        sentence_objects = []
+        sentences = sent_tokenize(self.raw)
+        char_index = 0  # Keeps track of character index within the blob
+        for sent in sentences:
+            # Compute the start and end indices of the sentence
+            # within the blob
+            start_index = self.raw.index(sent, char_index)
+            char_index += len(sent)
+            end_index = start_index + len(sent)
+            # Sentences share the same models as their parent blob
+            s = Sentence(sent, start_index=start_index, end_index=end_index,
+                tokenizer=self.tokenizer, np_extractor=self.np_extractor,
+                pos_tagger=self.pos_tagger, analyzer=self.analyzer,
+                parser=self.parser, classifier=self.classifier)
+            sentence_objects.append(s)
+        return sentence_objects
+</code></pre>
+<p>There is not attribute or method named &quot;sentiment&quot; in the class TextBlob, but we can see that it inherits class &quot;BaseBlob&quot; and has all the properties and methods of class BaseBlob. Therefore, we need to continue to search for BaseBlob content. Fortunately, we quickly found traces of sentiment.</p>
+<h2 id="class-baseblobstringlikemixin-blobcomparablemixin-source-code">Class BaseBlob(StringlikeMixin, BlobComparableMixin) <a href="https://github.com/sloria/TextBlob/blob/dev/textblob/blob.py#L337">source code</a></h2>
+<pre><code class="language-python"># textblob/blob.py
+
+class BaseBlob(StringlikeMixin, BlobComparableMixin):
+    &quot;&quot;&quot;An abstract base class that all textblob classes will inherit from.
+    Includes words, POS tag, NP, and word count properties. Also includes
+    basic dunder and string methods for making objects like Python strings.
+    ....
+    &quot;&quot;&quot;
+    np_extractor = FastNPExtractor()
+    pos_tagger = NLTKTagger()
+    tokenizer = WordTokenizer()
+    translator = Translator()
+    analyzer = PatternAnalyzer()
+    parser = PatternParser()
+
+    def __init__(self, text, tokenizer=None,
+        ...
+
+    ...
+
+    @cached_property
+    def sentiment(self):
+        &quot;&quot;&quot;Return a tuple of form (polarity, subjectivity ) where polarity
+        is a float within the range [-1.0, 1.0] and subjectivity is a float
+        within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is
+        very subjective.
+        :rtype: namedtuple of the form ``Sentiment(polarity, subjectivity)``
+        &quot;&quot;&quot;
+        return self.analyzer.analyze(self.raw)
+
+    ...
+</code></pre>
+<p>It declares the method sentiment as a property, which is convenient for users to call. And this method returns <strong>self.analyzer.analyze(self.raw)</strong>, which is <strong>PatternAnalyzer().analyze(self.raw)</strong>.</p>
+<p>Now what is PatternAnalyzer class?  Look at the statement at the beginning of the document &quot;from textblob.sentiments import PatternAnalyzer&quot;, let's keep track of this class</p>
+<h2 id="class-patternanalyzerbasesentimentanalyzer-source-code">Class PatternAnalyzer(BaseSentimentAnalyzer) <a href="https://github.com/sloria/TextBlob/blob/e6cd9791ae42e37b5a2132676f9ca69340e8d8c0/textblob/en/sentiments.py#L17">source code</a></h2>
+<p>The path of this file: textblob/en/sentiments.py</p>
+<pre><code class="language-python"># textblob/en/sentiments.py 
+
+class PatternAnalyzer(BaseSentimentAnalyzer):
+    &quot;&quot;&quot;Sentiment analyzer that uses the same implementation as the
+    pattern library. Returns results as a named tuple of the form:
+    ``Sentiment(polarity, subjectivity, [assessments])``
+    where [assessments] is a list of the assessed tokens and their
+    polarity and subjectivity scores
+    &quot;&quot;&quot;
+    kind = CONTINUOUS
+    # This is only here for backwards-compatibility.
+    # The return type is actually determined upon calling analyze()
+    RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity'])
+
+    def analyze(self, text, keep_assessments=False):
+        &quot;&quot;&quot;Return the sentiment as a named tuple of the form:
+        ``Sentiment(polarity, subjectivity, [assessments])``.
+        &quot;&quot;&quot;
+        #: Return type declaration
+        if keep_assessments:
+            Sentiment = namedtuple('Sentiment', ['polarity', 'subjectivity', 'assessments'])
+            assessments = pattern_sentiment(text).assessments
+            polarity, subjectivity = pattern_sentiment(text)
+            return Sentiment(polarity, subjectivity, assessments)
+
+        else:
+            Sentiment = namedtuple('Sentiment', ['polarity', 'subjectivity'])
+            return Sentiment(*pattern_sentiment(text))
+</code></pre>
+<p>Therefore, what is algorithm behind this two final commands?</p>
+<pre><code class="language-python">from collections import namedtuple
+from textblob.en import sentiment as pattern_sentiment
+
+Sentiment = namedtuple('Sentiment', ['polarity', 'subjectivity'])
+return Sentiment(*pattern_sentiment(text))
+</code></pre>
+<p>Google what is namedtuple if you don't know about it. So far, Sentiment is a empty tuple, and it is this statement <strong>&quot;Sentiment(*pattern_sentiment(text))&quot;</strong> that gives this tuple the correct value.<br>
+pattern_sentiment is the alias of sentiment, which is in textblob.en.__init__.py</p>
+<pre><code class="language-python">type(pattern_sentiment)     # textblob.en.Sentiment
+len(pattern_sentiment)      # 2860
+
+for k,v in pattern_sentiment.items():
+    print(k, v)
+
+'''
+Output:
+...
+absolute {'JJ': [0.2, 0.9, 1.0], None: [0.2, 0.9, 1.0]}
+absorbed {'JJ': [0.3, 0.9, 1.0], None: [0.3, 0.9, 1.0]}
+absorbing {'JJ': [0.2, 0.95, 1.0], None: [0.2, 0.95, 1.0]}
+absurd {'JJ': [-0.5, 1.0, 1.0], None: [-0.5, 1.0, 1.0]}
+...
+'''
+</code></pre>
+<hr>
+<pre><code class="language-python"># textblob.en.__init__.py
+
+sentiment = Sentiment(
+        path = os.path.join(MODULE, &quot;en-sentiment.xml&quot;),
+      synset = &quot;wordnet_id&quot;,
+   negations = (&quot;no&quot;, &quot;not&quot;, &quot;n't&quot;, &quot;never&quot;),
+   modifiers = (&quot;RB&quot;,),
+   modifier  = lambda w: w.endswith(&quot;ly&quot;),
+   tokenizer = parser.find_tokens,
+    language = &quot;en&quot;
+)
+</code></pre>
+<h2 id="class-sentimentlazydict-source-code">Class Sentiment(lazydict) <a href="https://github.com/sloria/TextBlob/blob/e6cd9791ae42e37b5a2132676f9ca69340e8d8c0/textblob/_text.py#L701">source code</a></h2>
+<p>This class is in textblob/_text.py</p>
+<pre><code class="language-python"># textblob/_text.py
+
+### SENTIMENT POLARITY LEXICON #####################################################################
+# A sentiment lexicon can be used to discern objective facts from subjective opinions in text.
+# Each word in the lexicon has scores for:
+# 1)     polarity: negative vs. positive    (-1.0 =&gt; +1.0)
+# 2) subjectivity: objective vs. subjective (+0.0 =&gt; +1.0)
+# 3)    intensity: modifies next word?      (x0.5 =&gt; x2.0)
+
+# For English, adverbs are used as modifiers (e.g., &quot;very good&quot;).
+# For Dutch, adverbial adjectives are used as modifiers
+# (&quot;hopeloos voorspelbaar&quot;, &quot;ontzettend spannend&quot;, &quot;verschrikkelijk goed&quot;).
+# Negation words (e.g., &quot;not&quot;) reverse the polarity of the following word.
+
+# Sentiment()(txt) returns an averaged (polarity, subjectivity)-tuple.
+# Sentiment().assessments(txt) returns a list of (chunk, polarity, subjectivity, label)-tuples.
+
+# Semantic labels are useful for fine-grained analysis, e.g.,
+# negative words + positive emoticons could indicate cynicism.
+
+class Sentiment(lazydict):
+
+    def __init__(self, path=&quot;&quot;, language=None, synset=None, confidence=None, **kwargs):
+        &quot;&quot;&quot; A dictionary of words (adjectives) and polarity scores (positive/negative).
+            The value for each word is a dictionary of part-of-speech tags.
+            The value for each word POS-tag is a tuple with values for
+            polarity (-1.0-1.0), subjectivity (0.0-1.0) and intensity (0.5-2.0).
+        &quot;&quot;&quot;
+        ....
+
+    ...
+
+    def __call__(self, s, negation=True, **kwargs):
+        &quot;&quot;&quot; Returns a (polarity, subjectivity)-tuple for the given sentence,
+            with polarity between -1.0 and 1.0 and subjectivity between 0.0 and 1.0.
+            The sentence can be a string, Synset, Text, Sentence, Chunk, Word, Document, Vector.
+            An optional weight parameter can be given,
+            as a function that takes a list of words and returns a weight.
+        &quot;&quot;&quot;
+        def avg(assessments, weighted=lambda w: 1):
+            s, n = 0, 0
+            for words, score in assessments:
+                w = weighted(words)
+                s += w * score
+                n += w
+            return s / float(n or 1)
+        # A pattern.en.wordnet.Synset.
+        # Sentiment(synsets(&quot;horrible&quot;, &quot;JJ&quot;)[0]) =&gt; (-0.6, 1.0)
+        if hasattr(s, &quot;gloss&quot;):
+            a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos) + (None,)]
+        # A synset id.
+        # Sentiment(&quot;a-00193480&quot;) =&gt; horrible =&gt; (-0.6, 1.0)   (English WordNet)
+        # Sentiment(&quot;c_267&quot;) =&gt; verschrikkelijk =&gt; (-0.9, 1.0) (Dutch Cornetto)
+        elif isinstance(s, basestring) and RE_SYNSET.match(s) and hasattr(s, &quot;synonyms&quot;):
+            a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos) + (None,)]
+        # A string of words.
+        # Sentiment(&quot;a horrible movie&quot;) =&gt; (-0.6, 1.0)
+        elif isinstance(s, basestring):
+            a = self.assessments(((w.lower(), None) for w in &quot; &quot;.join(self.tokenizer(s)).split()), negation)
+        # A pattern.en.Text.
+        elif hasattr(s, &quot;sentences&quot;):
+            a = self.assessments(((w.lemma or w.string.lower(), w.pos[:2]) for w in chain(*s)), negation)
+        # A pattern.en.Sentence or pattern.en.Chunk.
+        elif hasattr(s, &quot;lemmata&quot;):
+            a = self.assessments(((w.lemma or w.string.lower(), w.pos[:2]) for w in s.words), negation)
+        # A pattern.en.Word.
+        elif hasattr(s, &quot;lemma&quot;):
+            a = self.assessments(((s.lemma or s.string.lower(), s.pos[:2]),), negation)
+        # A pattern.vector.Document.
+        # Average score = weighted average using feature weights.
+        # Bag-of words is unordered: inject None between each two words
+        # to stop assessments() from scanning for preceding negation &amp; modifiers.
+        elif hasattr(s, &quot;terms&quot;):
+            a = self.assessments(chain(*(((w, None), (None, None)) for w in s)), negation)
+            kwargs.setdefault(&quot;weight&quot;, lambda w: s.terms[w[0]])
+        # A dict of (word, weight)-items.
+        elif isinstance(s, dict):
+            a = self.assessments(chain(*(((w, None), (None, None)) for w in s)), negation)
+            kwargs.setdefault(&quot;weight&quot;, lambda w: s[w[0]])
+        # A list of words.
+        elif isinstance(s, list):
+            a = self.assessments(((w, None) for w in s), negation)
+        else:
+            a = []
+        weight = kwargs.get(&quot;weight&quot;, lambda w: 1) # [(w, p) for w, p, s, x in a]
+        return Score(polarity = avg( [(w, p) for w, p, s, x in a], weight ),
+                 subjectivity = avg([(w, s) for w, p, s, x in a], weight),
+                  assessments = a)
+
+    def assessments(self, words=[], negation=True):
+        &quot;&quot;&quot; Returns a list of (chunk, polarity, subjectivity, label)-tuples for the given list of words:
+            where chunk is a list of successive words: a known word optionally
+            preceded by a modifier (&quot;very good&quot;) or a negation (&quot;not good&quot;).
+        &quot;&quot;&quot;
+        a = []
+        m = None # Preceding modifier (i.e., adverb or adjective).
+        n = None # Preceding negation (e.g., &quot;not beautiful&quot;).
+        for w, pos in words:
+            # Only assess known words, preferably by part-of-speech tag.
+            # Including unknown words (polarity 0.0 and subjectivity 0.0) lowers the average.
+            if w is None:
+                continue
+            if w in self and pos in self[w]:
+                p, s, i = self[w][pos]
+                # Known word not preceded by a modifier (&quot;good&quot;).
+                if m is None:
+                    a.append(dict(w=[w], p=p, s=s, i=i, n=1, x=self.labeler.get(w)))
+                # Known word preceded by a modifier (&quot;really good&quot;).
+                if m is not None:
+                    a[-1][&quot;w&quot;].append(w)
+                    a[-1][&quot;p&quot;] = max(-1.0, min(p * a[-1][&quot;i&quot;], +1.0))
+                    a[-1][&quot;s&quot;] = max(-1.0, min(s * a[-1][&quot;i&quot;], +1.0))
+                    a[-1][&quot;i&quot;] = i
+                    a[-1][&quot;x&quot;] = self.labeler.get(w)
+                # Known word preceded by a negation (&quot;not really good&quot;).
+                if n is not None:
+                    a[-1][&quot;w&quot;].insert(0, n)
+                    a[-1][&quot;i&quot;] = 1.0 / a[-1][&quot;i&quot;]
+                    a[-1][&quot;n&quot;] = -1
+                # Known word may be a negation.
+                # Known word may be modifying the next word (i.e., it is a known adverb).
+                m = None
+                n = None
+                if pos and pos in self.modifiers or any(map(self[w].__contains__, self.modifiers)):
+                    m = (w, pos)
+                if negation and w in self.negations:
+                    n = w
+            else:
+                # Unknown word may be a negation (&quot;not good&quot;).
+                if negation and w in self.negations:
+                    n = w
+                # Unknown word. Retain negation across small words (&quot;not a good&quot;).
+                elif n and len(w.strip(&quot;'&quot;)) &gt; 1:
+                    n = None
+                # Unknown word may be a negation preceded by a modifier (&quot;really not good&quot;).
+                if n is not None and m is not None and (pos in self.modifiers or self.modifier(m[0])):
+                    a[-1][&quot;w&quot;].append(n)
+                    a[-1][&quot;n&quot;] = -1
+                    n = None
+                # Unknown word. Retain modifier across small words (&quot;really is a good&quot;).
+                elif m and len(w) &gt; 2:
+                    m = None
+                # Exclamation marks boost previous word.
+                if w == &quot;!&quot; and len(a) &gt; 0:
+                    a[-1][&quot;w&quot;].append(&quot;!&quot;)
+                    a[-1][&quot;p&quot;] = max(-1.0, min(a[-1][&quot;p&quot;] * 1.25, +1.0))
+                # Exclamation marks in parentheses indicate sarcasm.
+                if w == &quot;(!)&quot;:
+                    a.append(dict(w=[w], p=0.0, s=1.0, i=1.0, n=1, x=IRONY))
+                # EMOTICONS: {(&quot;grin&quot;, +1.0): set((&quot;:-D&quot;, &quot;:D&quot;))}
+                if w.isalpha() is False and len(w) &lt;= 5 and w not in PUNCTUATION: # speedup
+                    for (type, p), e in EMOTICONS.items():
+                        if w in imap(lambda e: e.lower(), e):
+                            a.append(dict(w=[w], p=p, s=1.0, i=1.0, n=1, x=MOOD))
+                            break
+        for i in range(len(a)):
+            w = a[i][&quot;w&quot;]
+            p = a[i][&quot;p&quot;]
+            s = a[i][&quot;s&quot;]
+            n = a[i][&quot;n&quot;]
+            x = a[i][&quot;x&quot;]
+            # &quot;not good&quot; = slightly bad, &quot;not bad&quot; = slightly good.
+            a[i] = (w, p * -0.5 if n &lt; 0 else p, s, x)
+        return a
+
+    def annotate(self, word, pos=None, polarity=0.0, subjectivity=0.0, intensity=1.0, label=None):
+        ...
+</code></pre>
+<p>To be simply, the results returned from assessments method looks like:</p>
+<pre><code class="language-python">from textblob.en import sentiment as pattern_sentiment
+pattern_sentiment(text).assessments
+
+'''
+Output:
+[(['accomplished'], 0.2, 0.5, None),
+ (['internal'], 0.0, 0.0, None),
+ (['internal'], 0.0, 0.0, None),
+ (['particular'], 0.16666666666666666, 0.3333333333333333, None),
+ (['useful'], 0.3, 0.0, None),
+ (['other'], -0.125, 0.375, None),
+ (['not', 'great'], -0.4, 0.75, None)]
+
+ # The fist column is chunk word.           (w)
+ # The second column is polarity.           (p)
+ # The third column is subjectivity.        (s)
+ # The fourth column is label of the word.  (x)
+ '''
+</code></pre>
+<p>Then we know how __call__ methods works:</p>
+<pre><code class="language-python">def __call__(self, s, negation=True, **kwargs):
+
+    def avg(assessments, weighted=lambda w: 1):
+            s, n = 0, 0
+            for words, score in assessments:
+                w = weighted(words)
+                s += w * score
+                n += w
+            return s / float(n or 1)
+    ....
+    a = self.assessments(...)   # the format of &quot;a&quot; is looks like the output above
+    weight = kwargs.get(&quot;weight&quot;, lambda w: 1) # [(w, p) for w, p, s, x in a]
+    return Score(polarity = avg( [(w, p) for w, p, s, x in a], weight ),
+                subjectivity = avg([(w, s) for w, p, s, x in a], weight),
+                assessments = a)
+</code></pre>
+<p>We can easily find out that the whole text polarity and subjectivity are the weight average of polarity and subjectivity for each word.</p>
+<p>In fact, there are two main contributors that can make textblob's sentiment analysis accurate:</p>
+<ul>
+<li>Various rules in method assessments() of Sentiment class, which defines how to update the Polarity and Subjectivity values of the current word according to context.</li>
+<li>lexicon corpus building: en-sentiment.xml (textblob/en/en-sentiment.xml)  <a href="https://github.com/sloria/TextBlob/blob/e6cd9791ae42e37b5a2132676f9ca69340e8d8c0/textblob/en/en-sentiment.xml">online source</a></li>
+</ul>
+<hr>
+<p>Let's check out some interesting rules of textblob sentiment analysis</p>
+<p>First, the lexicon corpus contains 2860 words, and they are almost all adjective. But en-sentiment.xml has more records than 2860. Because some words have different polarities and subjectivities in different contexts. For example, there are 12 records belong to &quot;rich&quot;, and when textblob load this corpus, textblob average 12 polarities and 12 subjectivities to be the final polarity and subjectivity value of &quot;rich&quot;.</p>
+<p>The rules of textblob analysis are mainly in two aspects:</p>
+<ul>
+<li>modifier (i.e., adverb or adjective).</li>
+<li>negation (e.g., &quot;not beautiful&quot;)</li>
+</ul>
+<pre><code class="language-python">self.negations   = kwargs.get(&quot;negations&quot;, (&quot;no&quot;, &quot;not&quot;, &quot;n't&quot;, &quot;never&quot;))
+self.modifiers   = kwargs.get(&quot;modifiers&quot;, (&quot;RB&quot;,))
+self.modifier    = kwargs.get(&quot;modifier&quot; , lambda w: w.endswith(&quot;ly&quot;))
+</code></pre>
+<p>If current word is a negation (&quot;no&quot;, &quot;not&quot;, &quot;n't&quot;, &quot;never&quot;):</p>
+<pre><code class="language-python">a = []  # result list
+m = None # Preceding modifier (i.e., adverb or adjective).
+n = None # Preceding negation (e.g., &quot;not beautiful&quot;).
+negation = True     # default argument
+
+########### Current Word is Known ###########
+########### Rule 1 ###########
+# current Known word not preceded by a modifier (&quot;good&quot;).
+if m is None:
+    a.append(dict(w=[w], p=p, s=s, i=i, n=1, x=self.labeler.get(w)))    # normal append a dictionary
+
+########### Rule 2 ###########
+# current Known word preceded by a modifier (&quot;really good&quot;).
+if m is not None:
+    a[-1][&quot;w&quot;].append(w)            # append modifier word to the latest word to become one new chunck token
+    a[-1][&quot;p&quot;] = max(-1.0, min(p * a[-1][&quot;i&quot;], +1.0))       # new chunk token's original intensity times current word's polarity (control it between(-1.0, 1.0))
+    a[-1][&quot;s&quot;] = max(-1.0, min(s * a[-1][&quot;i&quot;], +1.0))       # same operation on the subjectivity
+    a[-1][&quot;i&quot;] = i                                          # i update to the current known word's intensity
+    a[-1][&quot;x&quot;] = self.labeler.get(w)                        # x update to the current known word's label
+
+########### Rule 3 ############
+# current Known word preceded by a negation (&quot;not really good&quot;).
+if n is not None:
+    a[-1][&quot;w&quot;].insert(0, n)         # insert negation word to the latest word to be one chunck token
+    a[-1][&quot;i&quot;] = 1.0 / a[-1][&quot;i&quot;]   # the latest word's intensity becomes the original countdown
+    a[-1][&quot;n&quot;] = -1                 # set n is -1
+
+########### Rule 4 ###########
+# current Known word may be a negation.
+# current Known word may be modifying the next word (i.e., it is a known adverb).
+m = None        # remove the influence from previous modifier (known or unknown word)
+n = None        # remove the influence from previous negation (known or unknown word)
+if pos and pos in self.modifiers or any(map(self[w].__contains__, self.modifiers)):   # if current known word is a modifier
+    m = (w, pos)        # assign (w, pos) tuple to m
+if negation and w in self.negations:    # if current known word is a negation
+    n = w               # assign current word to n
+
+
+########### Current Word is Unknown ###########
+########### Rule 5 ############
+# current Unknown word may be a negation (&quot;not good&quot;).
+if negation and w in self.negations:        # if current unknown word is a negation
+    n = w       # assign current word to n
+# current Unknown word. Retain negation across small words (&quot;not a good&quot;).
+elif n and len(w.strip(&quot;'&quot;)) &gt; 1:       # if previous word is a negation, and current word is more than on letter
+    n = None    # Reset n 
+
+########### Rule 6 ############
+# Unknown word may be a negation preceded by a modifier (&quot;really not good&quot;).
+if n is not None and m is not None and (pos in self.modifiers or self.modifier(m[0])):      # if modifier + negation
+    a[-1][&quot;w&quot;].append(n)    # append negation word to the latest word to become one new chunck token
+    a[-1][&quot;n&quot;] = -1         
+    n = None                # reset n
+# Unknown word. Retain modifier across small words (&quot;really is a good&quot;).
+elif m and len(w) &gt; 2:  
+    m = None    # Reset m
+
+########### Rule 7 ############
+# Exclamation marks boost previous word.
+if w == &quot;!&quot; and len(a) &gt; 0:
+    a[-1][&quot;w&quot;].append(&quot;!&quot;)
+    a[-1][&quot;p&quot;] = max(-1.0, min(a[-1][&quot;p&quot;] * 1.25, +1.0))
+
+########### Rule 8 ############
+# Exclamation marks in parentheses indicate sarcasm.
+if w == &quot;(!)&quot;:
+    a.append(dict(w=[w], p=0.0, s=1.0, i=1.0, n=1, x=IRONY))
+
+########### Rule 9 ############
+# EMOTICONS: {(&quot;grin&quot;, +1.0): set((&quot;:-D&quot;, &quot;:D&quot;))}
+if w.isalpha() is False and len(w) &lt;= 5 and w not in PUNCTUATION: # speedup
+    for (type, p), e in EMOTICONS.items():
+        if w in imap(lambda e: e.lower(), e):
+            a.append(dict(w=[w], p=p, s=1.0, i=1.0, n=1, x=MOOD))
+            break
+
+</code></pre>
+<pre><code class="language-flow">st=&gt;start: Assessment:&gt;https://github.com/sloria/TextBlob/blob/e6cd9791ae42e37b5a2132676f9ca69340e8d8c0/textblob/_text.py#L854
+e=&gt;end: Return a :&gt;http://www.google.com
+io1=&gt;inputoutput: Initialize a=[ ], m=None, n=None
+cond=&gt;condition: word in lexicon?
+&lt;!-- op1=&gt;operation: Initialize a, m, n --&gt;
+&lt;!-- sub1=&gt;subroutine: My Subroutine --&gt;
+op1=&gt;operation: Get word's p,s,i
+rule1=&gt;condition: m == None?
+r1yop=&gt;operation: append word dict to &quot;a&quot;
+r1nop=&gt;operation: a[-1][&quot;w&quot;].append(word), update p,s,i
+rule2=&gt;condition: n == None?
+r2nop=&gt;operation: a[-1][&quot;w&quot;].insert(0,n), update i, n
+op4=&gt;operation: reset m,n = None,None
+rule3=&gt;condition: word is modifier?
+r3yop=&gt;operation: m = w
+rule4=&gt;condition: word is negation?
+r4yop=&gt;operation: n = w
+
+
+io=&gt;inputoutput: catch something...
+para=&gt;parallel: parallel tasks
+
+st-&gt;io1-&gt;cond
+cond(yes)-&gt;op1-&gt;rule1
+rule1(yes)-&gt;r1yop-&gt;rule2
+rule1(no)-&gt;r1nop-&gt;rule2
+rule2(yes)-&gt;op4
+rule2(no)-&gt;r2nop-&gt;op4
+op4-&gt;rule3
+rule3(yes)-&gt;r3yop-&gt;rule4
+rule3(no)-&gt;rule4
+rule4(yes)-&gt;r4yop-&gt;e
+rule4(no)-&gt;e
+
+&lt;!-- cond(no)-&gt;para --&gt;
+&lt;!-- para(path1, bottom)-&gt;sub1(right)-&gt;op1 --&gt;
+&lt;!-- para(path2, top)-&gt;op1 --&gt;
+</code></pre>
+<p>'abc'.isalpha() ==&gt; True<br>
+'abc1'.isalpha() ==&gt; False<br>
+'abc:'.isalpha() ==&gt; False</p>
+<p>Sentiment.<strong>call</strong>() support lots of format</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://zl-wu.github.io/post/git-you-er-yuan-ru-men/" class="post-title gt-a-link">
+                    Git 幼儿园入门
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">不废话，就是干</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://zl-wu.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

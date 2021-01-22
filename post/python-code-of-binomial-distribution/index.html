@@ -1,10 +1,10 @@
-<html lang="zh">
+<html>
 <head>
     <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<title>关于 - ZL Wu&#39;s notebook</title>
+<title>Python code of binomial distribution | ZL Wu&#39;s notebook</title>
 
 <link rel="shortcut icon" href="https://zl-wu.github.io/favicon.ico?v=1611338682495">
 
@@ -33,7 +33,7 @@
 <!--<script src="media/scripts/index.js"></script>-->
 
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
@@ -199,18 +199,92 @@
     }
 </script>
     <div class="post-container">
-        <div class="post-detail">
+        <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
-                <div class="post-content">
+                <h2 class="post-title">
+                    Python code of binomial distribution
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-04-20 ·
+                    </time>
                     
+                        <a href="https://zl-wu.github.io/tag/aIIIsuMtu/" class="post-tags">
+                            # python
+                        </a>
+                    
+                        <a href="https://zl-wu.github.io/tag/x8V5slgayJ/" class="post-tags">
+                            # statistic
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>&quot;python code to play with binomial distribution&quot;</p>
+<!-- more -->
+<h3 id="binomial-distribution">Binomial Distribution</h3>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+def C_nk (n, k):
+    # get C(n,k)
+    res = 1
+    for i in range(n, n-k,-1):
+        res *= i
+    for i in range(k,0,-1):
+        res /= i
+    return res
+
+def binomProb(n, k, p):
+    return C_nk(n,k) * p**k * (1-p)**(n-k)
+
+
+# n = 10, P(yes) = 0.3; P(no) = 0.7
+n = 10
+p = 0.3
+x = np.arange(n+1)
+y = []
+for k in x:
+    y.append(binomProb(n,k,p))
+    
+# Draw the Binomial probability distribution
+plt.bar(x,y)
+plt.show()
+</code></pre>
+<pre><code class="language-python">import scipy.stats as sps
+
+# all k&gt;2 probability
+n = 10
+p = 0.3
+k = np.arange(n + 1)
+PX = sps.binom.pmf(k, n, p)
+# 二项分布累计分布
+print(sum(PX[2:]))
+</code></pre>
+<h3 id="bernoulli-distribution">Bernoulli Distribution</h3>
+<p>X~B(n,p), when n=1, Binomial distribution becomes Bernoulli Distribution.<br>
+伯努利分布、两点分布、0-1分布这三种分布是同一个分布的不同名称，又都是二项分布在n=1时的特例。</p>
+<p>概率质量函数(probability mass function，简称PMF)<br>
+累积分布函数(cumulative distribution function, 简称CDF)<br>
+离散概率分布(Discrete probability distribution)</p>
+
                 </div>
             </article>
         </div>
-        <br>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://zl-wu.github.io/post/markdown-syntax-note-continuously-updating/" class="post-title gt-a-link">
+                    Markdown syntax note (Continuously updating)
+                </a>
+            </div>
         
 
         
 
+        
+
+        
 
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first">不废话，就是干</div>
