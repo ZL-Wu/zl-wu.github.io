@@ -1,0 +1,735 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>二叉排序树 Binary Sort Tree (微观版) | ZL Wu&#39;s notebook</title>
+
+<link rel="shortcut icon" href="https://zl-wu.github.io/favicon.ico?v=1613748384322">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zl-wu.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<style>
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <style>
+    /* 导航栏样式 */
+    .navbar {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand {
+        display: inline-block;
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        line-height: inherit;
+        white-space: nowrap;
+    }
+
+    .navbar-brand:hover,
+    .navbar-brand:focus {
+        text-decoration: none;
+    }
+
+    .navbar-nav {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .navbar-collapse {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .navbar-toggler {
+        padding: 0.25rem 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .navbar-toggler:hover,
+    .navbar-toggler:focus {
+        text-decoration: none;
+    }
+
+    @media (min-width: 992px) {
+        .navbar-expand-lg {
+            -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+        }
+
+        .navbar-expand-lg .navbar-nav {
+            -ms-flex-direction: row;
+            flex-direction: row;
+        }
+
+        .navbar-expand-lg .navbar-collapse {
+            display: -ms-flexbox !important;
+            display: flex !important;
+            -ms-flex-preferred-size: auto;
+            flex-basis: auto;
+        }
+
+        .navbar-expand-lg .navbar-toggler {
+            display: none;
+        }
+    }
+
+    @media (max-width: 991px) {
+        #navbarSupportedContent {
+            display: none;
+        }
+    }
+</style>
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            ZL Wu&#39;s notebook
+        </div>
+    </div>
+    <button class="navbar-toggler" id="changeNavbar" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1613748384322"
+                action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = function () {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    二叉排序树 Binary Sort Tree (微观版)
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-02-10 ·
+                    </time>
+                    
+                        <a href="https://zl-wu.github.io/tag/1ap-6H7uV/" class="post-tags">
+                            # 数据结构
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>Binary Sort Tree, 又称二叉搜索树，二叉查找树 Binary Search Tree。<br>
+出现时间可以追溯到计算机刚出现的年代，是几百年的遗产。属于幼儿园大班级别的数据结构知识。<br>
+思维结构极其简单，重在学习代码结构，与一些扩展算法应用。</p>
+<!-- more -->
+<p><strong>任何数据结构最有价值的依然是思维模型。</strong></p>
+<h2 id="序言">序言</h2>
+<p>数据排序也是一种极其实用的数据组织方式，可以快速解决排名类的问题。因此在&quot;算法&quot;领域中，有一类专门研究针对无序数据的&quot;排序&quot;算法的大类，如冒泡、插入、归并、快排等等，都是对线性表结构的排序算法。<br>
+然而我们在解决问题时，不仅仅可以站在算法角度，还能够站在数据结构的角度，直接设计维护一个数据结构让我们在数据插入和删除等各种操作后，最后依然是有序的数据。<br>
+基于计算机幼儿园小班的知识储备，至少可以想得到两种数据结构方案：</p>
+<ol>
+<li>
+<p>维护一个有序的高级数组:</p>
+<ul>
+<li>数据插入时： 二分查找恰当的插入位置(O(logN)) + 插入新数据(O(N))。 总复杂度O(N)</li>
+<li>数据删除时： 二分查找待删除数据的位置(O(logN)) + 删除数据(O(N))。 总复杂度O(N)</li>
+<li>数据查询时： 按排名索引 O(1)</li>
+</ul>
+</li>
+<li>
+<p>维护一个有序的高级链表:</p>
+<ul>
+<li>数据插入时： 从头节点依次找到恰当插入位置(O(N)) + 插入新数据(O(1))。 总复杂度O(N)</li>
+<li>数据删除时： 从头节点依次找到待删除数据位置(O(N)) + 删除数据(O(1))。 总复杂的O(N)</li>
+<li>数据查询时： 按排名索引 O(N)</li>
+</ul>
+</li>
+</ol>
+<p>可以看得出上述两种有序数据结构在性能方面，没有大区别。那么为什么我们从不会去学习上述两个数据结构呢？ 因为过于低级了，而且还有另一个更加优秀的解决方案：<strong>二叉排序树</strong>。它同时吸取结合了有序数组快速二分查找的优势，与链表的快速插入删除的优势。</p>
+<hr>
+<h2 id="bst结构性质">BST结构性质</h2>
+<p>非常简单，仅3点：</p>
+<ol>
+<li>左子树 &lt; 根节点</li>
+<li>右子树 &gt; 根节点</li>
+<li>中序遍历结果就是一个有序的序列</li>
+</ol>
+<p>对树中的<strong>任何节点</strong>而言，左子树为空或所有数据都小于自己，右子树为空或所有数据都大于自己。</p>
+<p>用途：解决一切与<strong>排名相关</strong>的检索需求。</p>
+<hr>
+<h2 id="插入操作">插入操作</h2>
+<p>待插入的新数据从根节点出发，比根节点小就走左方向，比根节点大就走右方向。通过递归的方式，直至走到头。<br>
+因此新插入的数据一定就是叶节点（重复值不会插入）。</p>
+<p><code>BST插入操作插图待制作</code></p>
+<hr>
+<h2 id="删除操作">删除操作</h2>
+<p>删除操作稍复杂，需分情况讨论：</p>
+<ol>
+<li>删除叶节点，直接删除。</li>
+<li>删除度为1的节点。
+<ul>
+<li>把它唯一的「孤儿子树」直接挂在它的父节点上，位置不变。</li>
+</ul>
+</li>
+<li>删除度为2的节点，替换成删除度为1或0的节点情况。
+<ul>
+<li>该节点的前驱：左子树最大值</li>
+<li>该节点的后继：右子树最小值</li>
+<li>用前驱或后继来替换当前节点，然后再去删除用来替换的前驱或后继节点（也是通过递归的方式）。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>度就是节点的孩子个数。<br>
+删除度2节点只需要找前驱或者后继其中一个点来替换就行，不需前驱点和后继点都找出来。<br>
+代码已找前驱点为例。</p>
+</blockquote>
+<p><code>BST删除操作插图待制作</code></p>
+<hr>
+<h2 id="复杂度分析">复杂度分析</h2>
+<p>假设当前BST的树高是<code>H</code>。</p>
+<ol>
+<li>插入数据时：复杂度就是递归的次数，最多也就是<code>H</code>次。 总复杂度O(H)。</li>
+<li>删除数据时：最坏情况需要先找前驱或后继(O(H))，递归删除最坏也是(O(H))。 总复杂度O(H)。</li>
+<li>查询数据时：也是根据规则一步走一层向下搜索，最多搜索<code>H</code>次。 总复杂度O(H)。</li>
+</ol>
+<p>因此复杂度与树高H息息相关。<br>
+对二叉排序树而言，极其依赖输入的数据特点。第一个输入的数据点就是一切的起源，根节点，且不会再改变了。</p>
+<ul>
+<li>假如后续的输入数据是完全有序的，最终BST会退化成一个链表，此时树高<code>H</code>就是数据规模<code>N</code>。</li>
+<li>假如后续的输入数据是完全无序的，假设最终BST形成一个完美的平衡状态，此时树高<code>H</code>就是<code>log(N)</code></li>
+</ul>
+<p>树形结构不同，导致性能也不同。所以 不同的树形结构之间 不同的本质其实在于：<code>平均查找次数不同，即查找效率不同</code></p>
+<blockquote>
+<p>平均查找次数：每个节点被找到所需次数的期望，基于的假设是每个节点都是等概率的被查找。</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi mathvariant="normal">总</mi><mi mathvariant="normal">次</mi><mi mathvariant="normal">数</mi></mrow><mrow><mi mathvariant="normal">节</mi><mi mathvariant="normal">点</mi><mi mathvariant="normal">数</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{总次数}{节点数}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.363em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.677em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord cjk_fallback">节</span><span class="mord cjk_fallback">点</span><span class="mord cjk_fallback">数</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord cjk_fallback">总</span><span class="mord cjk_fallback">次</span><span class="mord cjk_fallback">数</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+</blockquote>
+<p>自然而然地，幼儿园的孩子们基本都会产生以下问题和新的学习方向：</p>
+<ol>
+<li>
+<p>BST的根节点不会变，因此它的结构极其依赖数据输入的顺序。那么有没有一种数据结构: 它既可以保持BST的性质，又能自适应的调整根节点，始终保持一种平衡的树结构呢？ 有，是数据结构中研究的一个大类：平衡二叉排序树。包括AVL树，红黑树等等。（小学内容）</p>
+</li>
+<li>
+<p>基于上面平均查找次数的假设，每个节点都是等概率被查找的。那假如真实情况里每个节点不是等概率被查找的呢？比如就存在有一些数据被用户频繁的搜索，一些数据自从存入就鲜有人问津。那么被频繁查询检索的数据节点是不是更应当靠近树根，使得查询次数少一些？ 是的，而且也已经有一种解决该问题的平衡二叉排序树结构：伸展树（小学内容）</p>
+</li>
+</ol>
+<blockquote>
+<p>二叉排序树最坏性能是O(N)，最优性能是O(logN)，碾压最初提出的 高级数组结构 和 高级链表结构。<br>
+高级数据结构多种多样。他们往往都是从基础数据结构出发，改善了一个应用场景的性能，就创造了一个我们又要去学习的高级数据结构。<br>
+很大部分高级数据结构其实都早已是古老的遗产了，由于他们解决的问题恰好应对了我们实际应用时的痛点，才能够历久弥新。然而他们提出的问题也并未有多巧妙、多难以想象。最珍贵的是学习前辈们为了解决这些问题的思维方式和解决方案，这就是高级数据结构的学习价值所在。<br>
+重视珍惜我们生活工作中遇到的种种奇怪问题是最简单的事情，但能否进一步下定决心、憋一口劲、坚持不懈的研究出可靠的解决方案、并持续优化这些问题呢？能否成功还是需要我们平时日复一日的海量经验观察与知识积累。</p>
+</blockquote>
+<hr>
+<h2 id="基础版二叉排序树代码演示">基础版二叉排序树代码演示</h2>
+<p>树形结构比较抽象，即使理解了思维模型，翻译成代码是有难度的。重点学习代码结构和技巧。</p>
+<h3 id="1-头文件定义">1. 头文件定义</h3>
+<pre><code class="language-c++">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define DATA(n) (n ? n-&gt;data : 0)
+#define L(n) (n ? n-&gt;lchild : NULL)
+#define R(n) (n ? n-&gt;rchild : NULL)
+
+typedef struct Node {
+    int data;
+    struct Node *lchild, *rchild;
+} Node;
+
+// 结构操作
+Node *getNewNode(int data);          // 创建新节点
+Node *insert(Node *root, int data);  // 插入数据
+Node *predecessor(Node *root);      // 寻找前驱节点（为删除操作服务）
+Node *erase(Node *root, int data);   // 删除数据
+void clear(Node *root);             // 析构树
+int search(Node *root, int val);    // 查找数据
+void printNode(Node *root);         // 打印单节点信息
+void output(Node *root);            // 中序遍历打印整棵树
+</code></pre>
+<blockquote>
+<ul>
+<li><code>Node</code> 结构是树中的任意节点，只有值、左子节点指针 与 右子节点指针 3个属性。</li>
+<li><code>getNewNode</code> 和 <code>clear</code> 是最最基础的创建节点与析构树操作。</li>
+<li><code>insert</code>, <code>predecessor</code>, <code>erase</code> 是维护BST结构性质的 数据插入 和 数据删除 操作。<strong>重点学习部分</strong></li>
+<li><code>search</code> 功能较简单，仅仅是判断数据是否在树中。</li>
+<li><code>printNode</code> 和 <code>output</code> 一起协作打印整棵树BST的信息。</li>
+</ul>
+</blockquote>
+<h3 id="2-源文件代码">2. 源文件代码</h3>
+<pre><code class="language-c++">Node *getNewNode(int data) {
+    Node *p = (Node *)malloc(sizeof(Node));
+    p-&gt;data = data;
+    p-&gt;lchild = p-&gt;rchild = NULL;
+    return p;
+}
+
+Node *insert(Node *root, int data) {
+    // 插入数据data：返回根节点指针
+    if (root == NULL) return getNewNode(data); // 成功到达叶节点，生成新节点插入
+    if (root-&gt;data == data) return root; // 出现重复值，开始回溯
+    // 核心插入逻辑：
+    if (root-&gt;data &gt; data) root-&gt;lchild = insert(root-&gt;lchild, data);
+    else root-&gt;rchild = insert(root-&gt;rchild, data);
+    return root;
+}
+
+Node *predecessor(Node *root) {
+    // 找前驱: 返回左子树的最大值节点
+    Node *temp = root-&gt;lchild;
+    while (temp-&gt;rchild) temp = temp-&gt;rchild;
+    return temp;
+}
+
+Node *erase(Node *root, int data) {
+    // 删除数据data：返回根节点指针
+    if (root == NULL) return NULL;
+    // 先找到待删除数据的位置
+    if (data &lt; root-&gt;data) {
+        root-&gt;lchild = erase(root-&gt;lchild, data);
+    } else if (data &gt; root-&gt;data) {
+        root-&gt;rchild = erase(root-&gt;rchild, data);
+    } else {
+        // 当前节点root就是待删除的节点
+        if (root-&gt;lchild == NULL || root-&gt;rchild == NULL) {
+            // 情况1：度为 0 或 1
+            Node *temp = root -&gt; lchild ? root-&gt;lchild : root-&gt;rchild;
+            free(root); // 释放当前节点空间
+            return temp;
+        } else {
+            // 情况2：度为 2
+            Node *temp = predecessor(root); // 找前驱节点
+            root-&gt;data = temp-&gt;data;
+            root-&gt;lchild = erase(root-&gt;lchild, temp-&gt;data); // 递归往左子树删除前驱节点。
+            return root;
+        }
+    }
+    return root;
+}
+
+int search(Node *root, int val) {
+    // 查找值。0：失败； 1：成功
+    if (root == NULL) return 0;
+    if (root-&gt;data == val) return 1;
+    if (root-&gt;data &gt; val) return search(root-&gt;lchild, val);
+    return search(root-&gt;rchild, val);
+}
+
+void clear(Node *root) {
+    // 递归析构
+    if (root == NULL) return;
+    clear(root-&gt;lchild);
+    clear(root-&gt;rchild);
+    free(root);
+    return ;
+}
+
+void printNode(Node *root) {
+    // 打印单个节点信息
+    printf(&quot;(%d, %d, %d)\n&quot;, root-&gt;data, DATA(L(root)), DATA(R(root)));
+}
+
+void output(Node *root) {
+    // 中序遍历
+    if(root == NULL) return;
+    output(root-&gt;lchild);
+    printNode(root);
+    output(root-&gt;rchild);
+    return ;
+}
+</code></pre>
+<blockquote>
+<ul>
+<li><code>insert</code> 和 <code>search</code> 操作基本一致。</li>
+<li>重点关注 <code>insert</code> 和 <code>erase</code> 操作，严格维护BST的性质。<code>erase</code> 中的将度1和度0情况代码合并优化了，仅是代码长度优化，实际结构操作逻辑没有任何变化。</li>
+<li>需注意 <code>insert</code> 和 <code>erase</code> 函数的返回值都是 <code>Node *</code>。 因为根节点可能会变化，所以要返回新的根节点值。这里的根节点不是狭义的根节点（树根），而是可以把任何节点都当成根节点，叶子节点也是没有孩子的根节点。</li>
+<li><code>predecessor</code> 函数实际是不完整的，当前版本只适用于找度2节点的前驱。对于没有左子树的度1节点和度0节点找前驱都是有bug的。但在以上场景足够用了，对度1和度0节点，我们没有找前驱的需求。</li>
+<li>代码难点在于理解和熟悉递归操作。</li>
+</ul>
+</blockquote>
+<h3 id="3-测试程序">3. 测试程序</h3>
+<pre><code class="language-c++">int main() {
+    int op, val;
+    Node *root = NULL;
+    while (~scanf(&quot;%d%d&quot;, &amp;op, &amp;val)) {
+        switch(op) {
+            case 0: printf(&quot;search %d, result : %d\n&quot;, val, search(root, val)); break;
+            case 1: root = insert(root, val); break;
+            case 2: root = erase(root, val); break;
+        }
+        if (op) {
+            printf(&quot;look:\n&quot;);
+            output(root);
+            printf(&quot;-------------------------\n&quot;);
+        }
+    }
+    return 0;
+}
+</code></pre>
+<hr>
+<h3 id="递归小提示">递归小提示</h3>
+<p>所有有关树形结构的操作几乎都离不开递归代码（虽然像以上版本的<code>insert</code>和<code>search</code>函数也可以用while循环解决，但是<code>erase</code>用循环就稍复杂）。<strong>递归的代码技巧是计算机幼儿园的孩子们毕业必须要掌握的</strong></p>
+<p>以上的BST中的递归逻辑比较简单，都是单线操作，单线到头了就开始单线回溯。不像深搜多条路径的问题，回溯到中途发现有岔路了又会往深处继续递归寻找新路径，更复杂一些（画递归树帮助理清过程）。但其实递归原理是一种非常标准的栈结构，熟悉后会觉得非常简单优雅 并且爱上它。</p>
+<p>我第一次接触递归代码是求阶乘和斐波那契数列，当时的感觉是和循环差不多。于是形成了一种错觉：任何递归格式的代码理应都可以翻译成循环格式的代码，那么只用学好容易理解的循环就够了，并且所有场景都用循环解决。但其实是不太准确的。递归相较于循环其实还是要稍微高级一点点。递归是一个动态的栈结构。</p>
+<p>递归代码很妙的一个地方在于：不同于单次循环，递归多了一个回溯的过程。简单来说，递归程序跑到了单次循环的终点后，还很聪明地自己再原路回到起点。比如教会狗狗出去扔垃圾，回来再顺便取封信回来。<br>
+通过灵活地写代码 可以安排递归程序在去的路上执行一些特定事务，回的路上再顺便执行一些事务。一般情况而言：</p>
+<ul>
+<li>递归调用代码之前的部分 都是在往终点去的路上要做的事情。</li>
+<li>递归调用代码之后的部分 就是回到起点路上要做的事情。<br>
+像那些在一去一回路上要办的事情又多又杂的情况下，用循环下指令 恐怕很难把逻辑理清并把代码写得很干净。</li>
+</ul>
+<blockquote>
+<p>递归可分为 &quot;头递归&quot; 和 &quot;尾递归&quot; 两种。关键在与想象栈结构，先push到终点再pop回起点，递归过程就很容易明白。<br>
+因此递归的缺点就是会占用很多内存资源，递归太深，内存恐怕装不下栈造成段错误。而且一去一回的过程时间开销也不小。除此之外，我觉得递归调用剩下的全是优点了，代码简洁优雅，好好整理一下也易读。<br>
+当然递归有许多奇怪的写法，有时需要考虑过程中返回值如何传递等等。</p>
+</blockquote>
+<hr>
+<h2 id="应用扩展">应用扩展</h2>
+<p>目前基础版的BST代码只实现了对结构性质的维护。真正对用户有价值的功能，只有<code>search</code>和<code>output</code>，未免过于鸡肋。既然是为了解决「排名」需求，那么至少还需要提供两个用户查询功能：</p>
+<ul>
+<li>排名第k位的元素值是多少？</li>
+<li>排名前k为的元素有哪些？ Top-k 问题</li>
+</ul>
+<ol>
+<li>
+<p>如何解决排名K的检索问题？</p>
+<ul>
+<li>假如当前节点的左子树大小为k-1，当前节点就一定是第k位元素。</li>
+<li>解决方案：节点增加size属性，代表当前节点为根的树大小。
+<ul>
+<li>LS 为root左子树的size</li>
+<li>LS == k - 1 则root为第k位元素</li>
+<li>LS &gt; k - 1 则第k位元素在左子树中，递归查找左子树的第k为元素</li>
+<li>LS &lt; k - 1 则第k位元素在右子树中，递归查找右子树的第(k - LS - 1) 位元素。</li>
+<li>特别注意：LS == k 并不能代表左子节点就是第k位元素！</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>如何解决Top-k问题？（小于排名第k位的所有元素）</p>
+<ul>
+<li>基于问题1的解决方案，Top-k问题也非常简单。</li>
+<li>情况1：LS == k - 1 则输出左子树 和 root值。</li>
+<li>情况2：LS &gt; k - 1 则再去左子树找所有小于第k位的值。</li>
+<li>情况3：LS &lt; k - 1 则输出左子树 和 root值，再去找右子树中所有小于 第(k - LS - 1) 位的值。</li>
+</ul>
+</li>
+</ol>
+<h3 id="二叉排序树-与-快排算法">二叉排序树 与 快排算法</h3>
+<p>熟悉幼儿园大班快排算法的原理后，很容易发现Top-k解法和快排太像了。</p>
+<p>快排核心操作就是：选取一个基准值，然后做partition操作。基准值就是根节点X，partition就是分成左右子树，左part都小于X，右part都大于X。</p>
+<p>所以&quot;快排算法&quot;在思维逻辑上借鉴的就是二叉排序树的核心思想，即使它并没有真的构造出一个二叉排序树。</p>
+<pre><code class="language-c++">// 基础快排代码（无任何优化版本）
+void quick_sort(int *num, int l, int r) {
+    // 边界条件
+    if (l &gt; r) return;
+    // 构造左右partition
+    int base = num[l], a = l, b = r;
+    while(a &lt; b) {
+        while (a &lt; b &amp;&amp; num[b] &gt;= base) --b;
+        if(a &lt; b) num[a++] = num[b];
+        while (a &lt; b &amp;&amp; num[a] &lt; base) ++a;
+        if(a &lt; b) num[b--] = num[a];
+    }
+    num[a] = base;
+    // 递归快排两部分
+    quick_sort(num, l, a-1);
+    quick_sort(num, a+1, r);
+    return;
+}
+</code></pre>
+<p><strong>思考1：快排的时间复杂度 和 二叉排序树 之间的关系？</strong><br>
+<strong>思考2：快排衍生出来的 快速选择算法(Top K 问题) 和 二叉排序树 之间的关系 ？</strong></p>
+<p>一旦深刻理解了数据结构的思维模型，数据结构和算法就是相辅相成的。算法的思维模型和数据结构的思维模型就是可以互相借鉴的。</p>
+<hr>
+<h2 id="优化升级版bst代码">优化：升级版BST代码</h2>
+<h3 id="1-头文件定义变化">1. 头文件定义变化</h3>
+<pre><code class="language-c++">#define SIZE(n) (n ? n-&gt;size : 0)
+
+// 新增size属性
+typedef struct Node {
+    int data, size;
+    Node *lchild, *rchild;
+} Node;
+
+// 修改方法
+Node *getNewNode(int data);          // 创建新节点
+Node *insert(Node *root, int data);  // 插入数据
+Node *erase(Node *root, int data);   // 删除数据
+
+// 新增方法
+void update_size(Node *root);       // 更新节点树大小size
+int search_k(Node *root, int k);    // 查找排名第k的数据
+void output_k(Node *root, int k);   // 打印 Top-k 的数据
+</code></pre>
+<blockquote>
+<ul>
+<li><code>getNewNode</code>, <code>insert</code>, <code>erase</code> 内部都新增更新size的操作。更新size的步骤完全封装在<code>update_size</code>函数中。</li>
+<li><code>search_k</code> 与 <code>output_k</code> 函数都是基于 size 属性实现排名检索的需求。</li>
+</ul>
+</blockquote>
+<h3 id="2-源文件代码变化">2. 源文件代码变化</h3>
+<pre><code class="language-c++">Node *getNewNode(int data) {
+    Node *p = (Node *)malloc(sizeof(Node));
+    p-&gt;data = data;
+    p-&gt;size = 0;
+    p-&gt;lchild = p-&gt;rchild = NULL;
+    return p;
+}
+
+void update_size(Node *root) {
+    // 更新size 即左子树size + 右子树size + 1（root自己）
+    root-&gt;size = SIZE(root-&gt;lchild) + SIZE(root-&gt;rchild) + 1;
+    return;
+}
+
+Node *insert(Node *root, int data) {
+    if (root == NULL) return getNewNode(data);
+    if (root-&gt;data == data) return root;
+    if (root-&gt;data &gt; data) root-&gt;lchild = insert(root-&gt;lchild, data);
+    else root-&gt;rchild = insert(root-&gt;rchild, data);
+    update_size(root); // 回溯更新size
+    return root;
+}
+
+Node *erase(Node *root, int data) {
+    if (root == NULL) return NULL;
+    if (data &lt; root-&gt;data) {
+        root-&gt;lchild = erase(root-&gt;lchild, data);
+    } else if (data &gt; root-&gt;data) {
+        root-&gt;rchild = erase(root-&gt;rchild, data);
+    } else {
+        if (root-&gt;lchild == NULL || root-&gt;rchild == NULL) {
+            Node *temp = root-&gt;lchild ? root-&gt;lchild : root-&gt;rchild;
+            free(root); 
+            return temp; // 这里不用更新size，因为度1节点root的子节点向下都不需要更新size
+        } else {
+            Node *temp = predecessor(root);
+            root-&gt;data = temp-&gt;data;
+            root-&gt;lchild = erase(root-&gt;lchild, temp-&gt;data);
+        }
+    }
+    update_size(root); // 回溯更新size
+    return root;
+}
+
+
+int search_k(Node *root, int k) {
+    // 返回排名第k位的元素值
+    if (root == NULL) return -1; // 失败，比如k超过整棵树的size了
+    if (SIZE(root-&gt;lchild) == k - 1) return root-&gt;data;
+    if (SIZE(root-&gt;lchild) &gt; k - 1) return search_k(root-&gt;lchild, k);
+    return search_k(root-&gt;rchild, k - SIZE(root-&gt;lchild) - 1);
+}
+
+void output_k(Node *root, int k) {
+    // 打印前k位元素
+    if (k == 0 || root == NULL) return ;
+    if (SIZE(root-&gt;lchild) &gt; k - 1) {
+        // 递归左子树
+        output_k(root-&gt;lchild, k);
+    } else {
+        // 打印左子树和根节点，然后递归右子树
+        output(root-&gt;lchild);
+        printNode(root);
+        output_k(root-&gt;rchild, k - SIZE(root-&gt;lchild) - 1);
+    }
+}
+</code></pre>
+<blockquote>
+<ul>
+<li>重点关注 <code>search_k</code>, <code>output_k</code> 两个函数。逻辑都很简单。</li>
+</ul>
+</blockquote>
+<h3 id="3-测试程序-2">3. 测试程序</h3>
+<pre><code class="language-c++">int main() {
+    int op, val;
+    Node *root = NULL;
+    while (~scanf(&quot;%d%d&quot;, &amp;op, &amp;val)) {
+        // 每次输入两个值：操作 + 值
+        //getchar();
+        switch (op) {
+            case 0: printf(&quot;search %d, result : %d\n&quot;, val, search(root, val)); break;
+            case 1: root = insert(root, val); break;
+            case 2: root = erase(root, val); break;
+            case 3: printf(&quot;search k = %d, result = %d\n&quot;,
+                           val, search_k(root, val)); break;
+            case 4: output_k(root, val); break;
+        }
+        if (op) {
+            printf(&quot;\n&quot;);
+            output(root);
+            printf(&quot;----------------------\n&quot;);
+        }
+    }
+    return 0;
+}
+</code></pre>
+<hr>
+<h2 id="总结">总结</h2>
+<p>相比于一开始假想的 &quot;高级有序数组结构&quot; 和 &quot;高级有序链表结构&quot;，明显有序的 &quot;二叉排序树结构&quot; 更加高级。<br>
+最优情况时，BST的任何操作复杂度都是<code>O(logN)</code>，唯一输给了高级有序数组排名检索的<code>O(1)</code>复杂度。<br>
+但是BST的取舍明显非常地值得，完美的平衡BST结构，面对21亿的数据量时，每一次的数据插入、删除、检索都能在31次之内完成。<br>
+这就是设计和创造模型的魅力。</p>
+<p>二叉排序树的性质非常简单，重点还是学习代码编写的技巧。<br>
+<strong>当然任何数据结构最具价值的依然是思维模型</strong><br>
+为加深对二叉排序树的理解，可加练一些非常基础的二叉树题目：</p>
+<ul>
+<li><a href="https://leetcode-cn.com/problems/balanced-binary-tree/">LC110. 平衡二叉树</a></li>
+<li><a href="https://leetcode-cn.com/problems/trim-a-binary-search-tree/">LC669. 修剪二叉搜索树</a></li>
+<li><a href="https://pintia.cn/problem-sets/994805342720868352/problems/994805485033603072">PAT1020 Tree Traversals (用后序和中序遍历还原层序遍历)</a></li>
+<li><a href="https://pintia.cn/problem-sets/994805342720868352/problems/994805440976633856">PAT1043 Is It a Binary Search Tree (用BST先序遍历还原后序遍历)</a></li>
+<li><a href="https://pintia.cn/problem-sets/994805342720868352/problems/994805407749357568">PAT1064 Complete Binary Search Tree (用完全BST中序遍历还原层序遍历)</a></li>
+<li>...</li>
+</ul>
+<p>由于二叉排序树的性能极其依赖树形结构，下一章学习能够自适应调整的平衡二叉树结构：AVL树。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://zl-wu.github.io/post/mla-collaborative-filtering/" class="post-title gt-a-link">
+                    MLA -- collaborative filtering
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">不废话，就是干</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://zl-wu.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

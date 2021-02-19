@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zl-wu.github.io</id>
     <title>ZL Wu&apos;s notebook</title>
-    <updated>2021-01-24T08:16:38.440Z</updated>
+    <updated>2021-02-19T15:26:51.022Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zl-wu.github.io"/>
     <link rel="self" href="https://zl-wu.github.io/atom.xml"/>
@@ -10,6 +10,21 @@
     <logo>https://zl-wu.github.io/images/avatar.png</logo>
     <icon>https://zl-wu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, ZL Wu&apos;s notebook</rights>
+    <entry>
+        <title type="html"><![CDATA[二叉排序树 Binary Sort Tree (微观版)]]></title>
+        <id>https://zl-wu.github.io/post/er-cha-pai-xu-shu-binary-sort-tree-wei-guan-ban/</id>
+        <link href="https://zl-wu.github.io/post/er-cha-pai-xu-shu-binary-sort-tree-wei-guan-ban/">
+        </link>
+        <updated>2021-02-10T15:12:15.000Z</updated>
+        <summary type="html"><![CDATA[<p>Binary Sort Tree, 又称二叉搜索树，二叉查找树 Binary Search Tree。<br>
+出现时间可以追溯到计算机刚出现的年代，是几百年的遗产。属于幼儿园大班级别的数据结构知识。<br>
+思维结构极其简单，重在学习代码结构，与一些扩展算法应用。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Binary Sort Tree, 又称二叉搜索树，二叉查找树 Binary Search Tree。<br>
+出现时间可以追溯到计算机刚出现的年代，是几百年的遗产。属于幼儿园大班级别的数据结构知识。<br>
+思维结构极其简单，重在学习代码结构，与一些扩展算法应用。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[MLA -- collaborative filtering]]></title>
         <id>https://zl-wu.github.io/post/mla-collaborative-filtering/</id>
@@ -109,17 +124,6 @@
         <summary type="html"><![CDATA[<p>&quot;Priori Probability + data = Posterior probability&quot;</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>&quot;Priori Probability + data = Posterior probability&quot;</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Python code of binomial distribution]]></title>
-        <id>https://zl-wu.github.io/post/python-code-of-binomial-distribution/</id>
-        <link href="https://zl-wu.github.io/post/python-code-of-binomial-distribution/">
-        </link>
-        <updated>2020-04-19T17:57:30.000Z</updated>
-        <summary type="html"><![CDATA[<p>&quot;python code to play with binomial distribution&quot;</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>&quot;python code to play with binomial distribution&quot;</p>
 ]]></content>
     </entry>
 </feed>
