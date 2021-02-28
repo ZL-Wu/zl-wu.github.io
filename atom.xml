@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zl-wu.github.io</id>
     <title>ZL Wu&apos;s notebook</title>
-    <updated>2021-02-19T15:26:51.022Z</updated>
+    <updated>2021-02-28T02:36:49.464Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zl-wu.github.io"/>
     <link rel="self" href="https://zl-wu.github.io/atom.xml"/>
@@ -11,6 +11,21 @@
     <icon>https://zl-wu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, ZL Wu&apos;s notebook</rights>
     <entry>
+        <title type="html"><![CDATA[AVL树（微观版）]]></title>
+        <id>https://zl-wu.github.io/post/avl-shu-wei-guan-ban/</id>
+        <link href="https://zl-wu.github.io/post/avl-shu-wei-guan-ban/">
+        </link>
+        <updated>2021-02-20T02:28:01.000Z</updated>
+        <summary type="html"><![CDATA[<p>AVL树得名于它的发明者G. M. Adelson-Velsky和E. M. Landis，他们在<strong>1962年</strong>的论文《An algorithm for the organization of information》中发表了它。 <em>--摘自百度百科</em><br>
+显然G. M. Adelson-Velsky贡献更大，是距今已有59年的老技术遗产。让人联想起同样拥有60多年历史的神经网络老模型理论，得益于现代硬件技术的提升，总算能够真正发挥实力，结果一鸣惊人，飞速发展。<br>
+<strong>小学生必知必会</strong></p>
+]]></summary>
+        <content type="html"><![CDATA[<p>AVL树得名于它的发明者G. M. Adelson-Velsky和E. M. Landis，他们在<strong>1962年</strong>的论文《An algorithm for the organization of information》中发表了它。 <em>--摘自百度百科</em><br>
+显然G. M. Adelson-Velsky贡献更大，是距今已有59年的老技术遗产。让人联想起同样拥有60多年历史的神经网络老模型理论，得益于现代硬件技术的提升，总算能够真正发挥实力，结果一鸣惊人，飞速发展。<br>
+<strong>小学生必知必会</strong></p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[二叉排序树 Binary Sort Tree (微观版)]]></title>
         <id>https://zl-wu.github.io/post/er-cha-pai-xu-shu-binary-sort-tree-wei-guan-ban/</id>
         <link href="https://zl-wu.github.io/post/er-cha-pai-xu-shu-binary-sort-tree-wei-guan-ban/">
@@ -18,11 +33,13 @@
         <updated>2021-02-10T15:12:15.000Z</updated>
         <summary type="html"><![CDATA[<p>Binary Sort Tree, 又称二叉搜索树，二叉查找树 Binary Search Tree。<br>
 出现时间可以追溯到计算机刚出现的年代，是几百年的遗产。属于幼儿园大班级别的数据结构知识。<br>
-思维结构极其简单，重在学习代码结构，与一些扩展算法应用。</p>
+思维结构极其简单，重在学习代码结构，与一些扩展算法应用。<br>
+<strong>幼儿园必知必会</strong></p>
 ]]></summary>
         <content type="html"><![CDATA[<p>Binary Sort Tree, 又称二叉搜索树，二叉查找树 Binary Search Tree。<br>
 出现时间可以追溯到计算机刚出现的年代，是几百年的遗产。属于幼儿园大班级别的数据结构知识。<br>
-思维结构极其简单，重在学习代码结构，与一些扩展算法应用。</p>
+思维结构极其简单，重在学习代码结构，与一些扩展算法应用。<br>
+<strong>幼儿园必知必会</strong></p>
 ]]></content>
     </entry>
     <entry>
@@ -113,17 +130,6 @@
 ]]></summary>
         <content type="html"><![CDATA[<p>When improving the model parameters of machine learning algorithms, that is, unconstrained optimalization problem.<br>
 <strong>Gradient Descent method</strong> is one of most common used methods. The other one is the least square method. Here is a complete summary of the gradient descent method.</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MLA -- Naive Bayes theory]]></title>
-        <id>https://zl-wu.github.io/post/mla-naive-bayes-theory/</id>
-        <link href="https://zl-wu.github.io/post/mla-naive-bayes-theory/">
-        </link>
-        <updated>2020-05-14T16:47:58.000Z</updated>
-        <summary type="html"><![CDATA[<p>&quot;Priori Probability + data = Posterior probability&quot;</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>&quot;Priori Probability + data = Posterior probability&quot;</p>
 ]]></content>
     </entry>
 </feed>

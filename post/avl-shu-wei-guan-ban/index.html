@@ -1,0 +1,615 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>AVL树（微观版） | ZL Wu&#39;s notebook</title>
+
+<link rel="shortcut icon" href="https://zl-wu.github.io/favicon.ico?v=1614479795768">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zl-wu.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<style>
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <style>
+    /* 导航栏样式 */
+    .navbar {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand {
+        display: inline-block;
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        line-height: inherit;
+        white-space: nowrap;
+    }
+
+    .navbar-brand:hover,
+    .navbar-brand:focus {
+        text-decoration: none;
+    }
+
+    .navbar-nav {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .navbar-collapse {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .navbar-toggler {
+        padding: 0.25rem 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .navbar-toggler:hover,
+    .navbar-toggler:focus {
+        text-decoration: none;
+    }
+
+    @media (min-width: 992px) {
+        .navbar-expand-lg {
+            -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+        }
+
+        .navbar-expand-lg .navbar-nav {
+            -ms-flex-direction: row;
+            flex-direction: row;
+        }
+
+        .navbar-expand-lg .navbar-collapse {
+            display: -ms-flexbox !important;
+            display: flex !important;
+            -ms-flex-preferred-size: auto;
+            flex-basis: auto;
+        }
+
+        .navbar-expand-lg .navbar-toggler {
+            display: none;
+        }
+    }
+
+    @media (max-width: 991px) {
+        #navbarSupportedContent {
+            display: none;
+        }
+    }
+</style>
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            ZL Wu&#39;s notebook
+        </div>
+    </div>
+    <button class="navbar-toggler" id="changeNavbar" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1614479795768"
+                action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = function () {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    AVL树（微观版）
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-02-20 ·
+                    </time>
+                    
+                        <a href="https://zl-wu.github.io/tag/1ap-6H7uV/" class="post-tags">
+                            # 数据结构
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>AVL树得名于它的发明者G. M. Adelson-Velsky和E. M. Landis，他们在<strong>1962年</strong>的论文《An algorithm for the organization of information》中发表了它。 <em>--摘自百度百科</em><br>
+显然G. M. Adelson-Velsky贡献更大，是距今已有59年的老技术遗产。让人联想起同样拥有60多年历史的神经网络老模型理论，得益于现代硬件技术的提升，总算能够真正发挥实力，结果一鸣惊人，飞速发展。<br>
+<strong>小学生必知必会</strong></p>
+<!-- more -->
+<h2 id="序言">序言</h2>
+<p>前置知识点：二叉排序树 Binary Sort Tree<br>
+在二叉排序树BST结构中已讨论过，BST从根本上提供了一种将杂乱数据进行有序组织的方式，从而帮助我们高效快速的检索和排名。但它最大的缺陷是非常依赖输入数据的分布和操作顺序，一旦遇到了一个非常有序的数据集，BST就会退化成了普通链表，失去性能优势（原因是BST的根节点永远不会变化）。因此科学家提出了「可自适应调整的平衡二叉排序树」, 简称 &quot;平衡二叉排序树&quot;。 无论我们怎样操作数据进行插入或删除，最终的树形结构始终都能保持平衡，不会退化成一条链表。<br>
+自然而然地，我们能够想到这样的数据结构在我们进行插入或删除数据时，它一定是内部存在着某种自适应的调整（动态改变根节点），维持着整体树的平衡，因此这些调整也是隐形的开销。</p>
+<blockquote>
+<p>平衡二叉树关键词：平衡、调整。<br>
+思考：</p>
+<ol>
+<li>如何定义一棵树是否平衡？ <strong>「平衡条件」</strong></li>
+<li>根据平衡定义，如何进行自适应调整？ <strong>「调整方式」</strong></li>
+</ol>
+</blockquote>
+<blockquote>
+<p>平衡二叉排序树是一个大类，里面可以细分出太多种不同的模型，任何一种平衡二叉排序树模型都必须要准确回答上面两个问题。<br>
+细分的平衡BST模型之间的不同 可以简单归纳为平衡条件的不同，从而产生不同的调整方式。</p>
+</blockquote>
+<hr>
+<h2 id="性质">性质</h2>
+<p>AVL树是平衡二叉排序树中的一种，且目前而言应该是其中最完美平衡的一个，因为<strong>它的平衡条件特别苛刻</strong>, 反过来说<strong>它的平衡条件也非常合乎常理</strong>。<br>
+非常直观地，我们若想要一棵二叉树尽可能的平衡，就是希望每一个节点的左子树和右子树高度尽可能都相等, 让整棵树的高度尽可能的矮一些。那么如何将这种思想按某种规则量化呢？ 很简单即左子树和右子树的高度差不能大于1：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∣</mi><mi>H</mi><mo>(</mo><mi>l</mi><mi>e</mi><mi>f</mi><mi>t</mi><mo>)</mo><mo>−</mo><mi>H</mi><mo>(</mo><mi>r</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>)</mo><mi mathvariant="normal">∣</mi><mo>&lt;</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|H(left) - H(right)| &lt;= 1
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mclose">)</span><span class="mord">∣</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></span></p>
+<p>这也是AVL树定义的平衡条件规则。因此只要基于这条规则，AVL树就不可能退化成一条链表结构。</p>
+<p>注意：</p>
+<ol>
+<li>平衡二叉排序树的本质依然是二叉排序树，所以拥有二叉排序树的所有性质</li>
+<li>平衡二叉排序树的学习重点在于：「平衡条件」 及 「平衡调整方式」 的学习。</li>
+</ol>
+<blockquote>
+<p>提一句：只要喜欢也可以自由更改平衡条件，使左右子树的高度差不大于2或3等等。可以思考哪种平衡条件更严苛？平衡条件的宽松和严苛有什么好处和坏处？<br>
+还有一种目前工程应用最广泛的平衡二叉排序树结构「红黑树」，平衡条件相对宽松，但平衡条件比较抽象，第一次很难直观理解。</p>
+</blockquote>
+<hr>
+<h2 id="思考">思考</h2>
+<p>思考1. 高度为H的BST (二叉排序树)，所包含节点的数量在什么范围（最多和最少）？</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>H</mi><mo>≤</mo><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo>≤</mo><msup><mn>2</mn><mi>H</mi></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">H \le size \le 2^H - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.13597em;"></span><span class="mord mathdefault" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.79549em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.924661em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.08125em;">H</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></li>
+</ul>
+<p>思考2. 高度为H的AVL树，所包含节点的数量在什么范围（最多和最少）？</p>
+<ul>
+<li>假设 low(h) 代表高度为h 的AVL树 最少包含的节点数目。</li>
+<li>然后我们在左右子树分别放 高度为 H-1的树 和 H-2的树，引出下式：</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi><mo>(</mo><mi>H</mi><mo>−</mo><mn>2</mn><mo>)</mo><mo>+</mo><mi>l</mi><mi>o</mi><mi>w</mi><mo>(</mo><mi>H</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>+</mo><mn>1</mn><mo>≤</mo><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo>≤</mo><msup><mn>2</mn><mi>H</mi></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">low(H-2) + low(H-1) + 1 \le size \le 2^H - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.78041em;vertical-align:-0.13597em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.79549em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.924661em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.08125em;">H</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>
+<ul>
+<li>斐波那契数列的增长速度大概是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1.61</mn><msup><mn>8</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">1.618^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord">6</span><span class="mord">1</span><span class="mord"><span class="mord">8</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span></span></span></span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1.61</mn><msup><mn>8</mn><mi>H</mi></msup><mo>≤</mo><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo>≤</mo><msup><mn>2</mn><mi>H</mi></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1.618^H \le size \le 2^H - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.977301em;vertical-align:-0.13597em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord">6</span><span class="mord">1</span><span class="mord"><span class="mord">8</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.08125em;">H</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.79549em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.924661em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.08125em;">H</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></li>
+</ul>
+</li>
+</ul>
+<p><strong>结论：节点数量N 与 树高H 的关系大概是 H = log(N)</strong></p>
+<p>思考3. 根据AVL树的平衡条件，你能尽可能的在纸上罗列出多少种不平衡的样例？能否看到一点点规律出来？</p>
+<hr>
+<h2 id="数据的插入和删除">数据的插入和删除</h2>
+<p>因为本质上就是BST，所以这部分与BST的操作一模一样。<br>
+关键在于插入或删除操作后有可能破坏AVL树制定的平衡条件规则，因此最后只需要多增加平衡调整操作。</p>
+<hr>
+<h2 id="调整条件4种失横类型">调整条件（4种失横类型）</h2>
+<p>答思考3：根据前辈们的研究，一共总结归纳出4种失衡类型：LL, LR, RL, RR。<br>
+一般操作是站在父节点root看俩子节点高度差是否大于1，若失衡（大于1），则再向下一层查看孙子节点，找出是属于哪一种失衡类型？</p>
+<p>特别需要注意一点：<br>
+要明白我们说root节点失衡了，需要调整，表示：只在root节点向下看时是失衡状态，但是root节点的内部(左右分支)任意节点向下看全都是平衡的。这点非常重要，关系到调整策略的生效。（比如我们从最初的根节点就发现失衡，向下看一看左右分支也失衡，那么不能立刻调整根节点，需要向下找到最一线的失衡节点，然后再向上回溯调整。）因为我们的调整策略是失衡节点调整后 不会影响节点下面的平衡性，而有可能影响节点上面的平衡性。</p>
+<p>思考4：树形结构的失衡调整大致都是两种操作：左旋+右旋。能试试自己旋转调整4种失衡类型吗？</p>
+<figure data-type="image" tabindex="1"><img src="https://pic4.zhimg.com/v2-76c73303b557e7bd2845a3312c3e5bb4_r.jpg?source=1940ef5c" alt="img" loading="lazy"></figure>
+<hr>
+<h2 id="调整策略">调整策略</h2>
+<ol>
+<li>LL型 和 RR型
+<ul>
+<li>LL型：直接拿root大右旋。（上图+2 +1型）</li>
+<li>RR型：直接拿root大左旋。（上图-2 -1型）</li>
+</ul>
+</li>
+<li>LR型 和 RL型
+<ul>
+<li>LR：先拿root的左子树 小左旋变成 LL，再拿root大右旋 平衡。（上图+2 -1型）</li>
+<li>RL：先拿root的右子树 小右旋变成 RR， 再拿root大左旋 平衡。（上图-2 +1型）</li>
+</ul>
+</li>
+</ol>
+<p>平衡调整策略：</p>
+<ol>
+<li>
+<p>发生在回溯阶段时，出现的第一个失衡节点处。</p>
+</li>
+<li>
+<p>理解平衡调整策略的关键在于：分析清楚四种情况下，ABCD四棵子树 树高的关系</p>
+</li>
+<li>
+<p>LR 和 LL 可以写在一起；RL 和 RR 可以写在一起。</p>
+<p>思考5：LL类型能否直接用小右旋代替？在什么情况下不能？<br>
+思考6：旋转前后，哪些节点的高度是不变的？哪些节点的高度是会变的？<br>
+思考7：<strong>为什么说AVL插入新节点所需要的最大旋转次数是常数，不需要一直旋转到根节点？为什么AVL删除节点后的调整有可能会旋转到根节点？</strong></p>
+</li>
+</ol>
+<hr>
+<h2 id="关键代码演示">关键代码演示</h2>
+<h3 id="1-nil节点">1. NIL节点</h3>
+<pre><code class="language-c++">Node __NIL;
+#define NIL (&amp;__NIL)
+__attribute__((constructor))
+void init_NIL(){
+    NIL-&gt;key = NIL-&gt;h = 0;
+    NIL-&gt;lchild = NIL-&gt;rchild = NIL;
+    return ;
+}
+</code></pre>
+<blockquote>
+<p><code>NIL</code>节点是一种特殊的节点，它的左右子节点都指向自己。<br>
+在AVL树的实现中，我们用制造的<code>NIL</code>节点来代替<code>NULL</code>，这是一种编码技巧。<br>
+代码解释：<br>
+<code>__attribute__((constructor))</code> 表示令接下来的函数在main()函数之前就执行。（当然不附加这条属性，在main()函数内部的第一行执行init_NIL()函数是一样的效果）</p>
+</blockquote>
+<h3 id="2-调整策略代码">2. 调整策略代码</h3>
+<pre><code class="language-C++">Node *maintain(Node *root) {
+    if (abs(H(L(root)) - H(R(root))) &lt;= 1) return root;
+    if (H(L(root)) &gt; H(R(root))) {
+        // L 型：LL or LR
+        if (H(L(L(root))) &lt; H(R(L(root)))) {
+            // 这种多层结构时 NIL 的作用就发挥出来了，否则要加很多判断
+            root-&gt;lchild = left_rotate(root-&gt;lchild); // LR 小左旋；
+        }
+        root = right_rotate(root); // 最后一定要大右旋；
+    } else {
+        // R 型：RR or RL
+        if (H(R(R(root))) &lt; H(L(R(root)))) {
+            // 右子树的 左侧更高
+            root-&gt;rchild = right_rotate(root-&gt;rchild); //RL 小右旋
+        }
+        root = left_rotate(root); // 一样无论RR 或 RL 最后都要大左旋
+    }
+    return root;
+}
+</code></pre>
+<p>思考7：maintain()调整能否只用在插入或删除位置一次，而不在整个回溯过程每个位置都做调整？即当前节点调整平衡了，父节点是不是也就平衡了？什么情况下不是？</p>
+<h3 id="3-左旋和右旋代码">3. 左旋和右旋代码</h3>
+<pre><code class="language-c++">Node *left_rotate(Node *root) {
+    Node *p = root-&gt;rchild;
+    root-&gt;rchild = p-&gt;lchild;
+    p-&gt;lchild = root;
+    update_height(root);
+    update_height(p);
+    return p;
+}
+
+Node *right_rotate(Node *root) {
+    Node *p = root-&gt;lchild;
+    root-&gt;lchild = p-&gt;rchild;
+    p-&gt;rchild = root;
+    update_height(root);
+    update_height(p);
+    return p;
+}
+</code></pre>
+<blockquote>
+<p>尤其注意一个易错点：左旋和右旋后，要更新两个节点的height，两点高度有变化。<br>
+而且必须是先更新root 再更新p。因为旋转完成后，root 实际到了 p 的下面。</p>
+</blockquote>
+<p>思考8：既然maintain()里包括rotate操作，rotate操作里也都有update_height()。是不是我们不需要在回溯过程中再更新update_height？不是。</p>
+<hr>
+<h2 id="完整代码">完整代码</h2>
+<p>最基础的AVL树实现：</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define H(a) (a-&gt;h)
+#define L(a) (a-&gt;lchild)
+#define R(a) (a-&gt;rchild)
+
+typedef struct Node {
+    int key, h;
+    struct Node *lchild, *rchild;
+} Node;
+
+Node __NIL;
+#define NIL (&amp;__NIL)
+__attribute__((constructor))
+void init_NIL() {
+    NIL-&gt;key = NIL-&gt;h = 0;
+    NIL-&gt;lchild = NIL-&gt;rchild = NIL;
+    return ;
+}
+
+Node *getNewNode(int key) {
+    Node *p = (Node *)malloc(sizeof(Node));
+    p-&gt;key = key;
+    p-&gt;h = 1;
+    p-&gt;lchild = p-&gt;rchild = NIL;
+    return p;
+}
+
+void update_height(Node *root) {
+    root-&gt;h = (H(L(root)) &gt; H(R(root)) ? H(L(root)) : H(R(root))) + 1;
+    return ;
+}
+
+Node *left_rotate(Node *root) {
+    Node *p = root-&gt;rchild;
+    root-&gt;rchild = p-&gt;lchild;
+    p-&gt;lchild = root;
+    update_height(root);
+    update_height(p);
+    return p;
+}
+
+Node *right_rotate(Node *root) {
+    Node *p = root-&gt;lchild;
+    root-&gt;lchild = p-&gt;rchild;
+    p-&gt;rchild = root;
+    update_height(root);
+    update_height(p);
+    return p;
+}
+
+Node *maintain(Node *root) {
+    if (abs(H(L(root)) - H(R(root))) &lt;= 1) return root;
+    if (H(L(root)) &gt; H(R(root))) {
+        // LL LR
+        if (H(R(L(root))) &gt; H(L(L(root)))) {
+            root-&gt;lchild = left_rotate(root-&gt;lchild);
+        }
+        root = right_rotate(root);
+    } else {
+        // RR RL
+        if (H(L(R(root))) &gt; H(R(R(root)))) {
+            root-&gt;rchild = right_rotate(root-&gt;rchild);
+        }
+        root = left_rotate(root);
+    }
+    return root;
+}
+
+Node *insert(Node *root, int key) {
+    if (root == NIL) return getNewNode(key);
+    if (root-&gt;key == key) return root;
+    else if (root-&gt;key &gt; key) root-&gt;lchild = insert(root-&gt;lchild, key);
+    else root-&gt;rchild = insert(root-&gt;rchild, key);
+    update_height(root);
+    return maintain(root);
+}
+
+Node *predecessor(Node *root) {
+    Node *p = root-&gt;lchild;
+    while (p-&gt;rchild != NIL) p = p-&gt;rchild;
+    return p;
+}
+
+Node *erase(Node *root, int key) {
+    if (root == NIL) return NIL;
+    if (root-&gt;key &gt; key) {
+        root-&gt;lchild = erase(root-&gt;lchild, key);
+    } else if (root-&gt;key &lt; key) {
+        root-&gt;rchild = erase(root-&gt;rchild, key);
+    } else {
+        if (root-&gt;lchild == NIL || root-&gt;rchild == NIL) {
+            Node *p = root-&gt;lchild == NIL ? root-&gt;rchild : root-&gt;lchild;
+            free(root);
+            return p;
+        } else {
+            Node *p = predecessor(root);
+            root-&gt;key = p-&gt;key;
+            root-&gt;lchild = erase(root-&gt;lchild, p-&gt;key);
+        }
+    }
+    update_height(root);
+    return maintain(root);
+}
+
+void clear(Node *root) {
+    if (root == NIL) return;
+    clear(root-&gt;lchild);
+    clear(root-&gt;rchild);
+    free(root);
+    return ;
+}
+
+void printNode(Node *root) {
+    printf(&quot;(%d [%d], %d, %d)\n&quot;,
+          root-&gt;key, root-&gt;h,
+          root-&gt;lchild-&gt;key,
+          root-&gt;rchild-&gt;key);
+}
+
+void output(Node *root) {
+    if (root == NIL) return;
+    output(root-&gt;lchild);
+    printNode(root);
+    output(root-&gt;rchild);
+    return ;
+}
+
+int main() {
+    //init_NIL();
+    int op, val;
+    Node *root = NIL;
+    while(~scanf(&quot;%d%d&quot;, &amp;op, &amp;val)) {
+        getchar();
+        switch(op) {
+            case 0: root = erase(root, val); break;
+            case 1: root = insert(root, val); break;
+        }
+        output(root);
+        printf(&quot;----------------\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+<hr>
+<h2 id="课外思考">课外思考</h2>
+<p>问题：普通BS树 一定比 高级AVL树 差吗？</p>
+<ul>
+<li>答：当然不一定！BS树的性能很大程度上是根据插入数据的顺序决定的。可以看出AVL树是改进普通BS树的性能下限，而不是提高上限。即使用AVL树，不管数据多么乱，性能再差也不会差多少，因此实际工程中通常青睐AVL树。但并非意味着BS树不好，只用BS树的话性能需要由输入数据决定，拼运气。</li>
+<li>对BS树来说，最好的数据输入情况是直接形成一个完全二叉树；最坏的情况是一个完全有序的数据，退化成一个链表。AVL树的话，经过调整，一般总是完全二叉树。</li>
+<li>上升一下人生观，有的人不学习但依然生活得很好，很大程度是运气好，类似BST。但是学习和提升成绩至少能提升我们的下限，避免到太糟糕的情况。</li>
+</ul>
+<p>小结：</p>
+<ol>
+<li>AVL树改进的是节点数量的下限</li>
+<li>树高 = 生命长度， 节点数量 = 生命财富， 不同的算法达到的结果也不一样</li>
+<li>教育提升的是下限，而非上限。上限取决于能力和运气。</li>
+</ol>
+<h4 id="avl树的兄弟-sb树">AVL树的兄弟 -- SB树</h4>
+<p>与AVL树几乎一致，AVL树用节点的高度来作为平衡依据，而SB树用节点的大小size作为平衡依据。</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∣</mi><mi>S</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo>(</mo><mi>l</mi><mi>e</mi><mi>f</mi><mi>t</mi><mo>)</mo><mo>−</mo><mi>S</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo>(</mo><mi>r</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>)</mo><mi mathvariant="normal">∣</mi><mo>&lt;</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|Size(left) - Size(right)| &lt;= 1
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault">e</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault">e</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mclose">)</span><span class="mord">∣</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></span></p>
+<hr>
+<h2 id="总结">总结</h2>
+<p>代码部分：</p>
+<ol>
+<li>插入和删除以后，注意重新计算树高字段。</li>
+<li>插入和删除操作，每一次回溯return的都是 已调整好的节点。</li>
+<li>平衡调整判断四种失衡形态，进行相应左旋和右旋，左旋右旋 结束后也要重新计算树高字段。</li>
+<li>引入了NIL字段，用来代替NULL（注意所有的NULL都要用NIL代替），NULL不可以访问字段，但是NIL是一个实际节点，可访问。（NIL字段在红黑树里是非常重要的，否则代码变得极其复杂）</li>
+</ol>
+<p>模型部分：<br>
+AVL树极适合作为平衡二叉排序树学习的入门结构。它的平衡条件和策略都非常地直观和容易理解，因此代码也不复杂。<br>
+AVL树的<strong>平衡条件非常严苛</strong>，所以AVL树常常都是完美二叉树的状态，使数据检索和排名的性能能达到最优。<br>
+但是在代码模拟中就可以发现，这种严苛的平衡条件，代价是频繁的树结构调整，无论数据插入或删除。<br>
+在工程应用中，经常要考虑数据量极大的情况，例如几秒钟百万次操作的情况？此时用频繁调整的巨大开销来换取最极速检索效率是否值得呢？</p>
+<p>练习题目：<br>
+<a href="https://pintia.cn/problem-sets/994805342720868352/problems/994805404939173888">1066 Root of AVL Tree</a></p>
+<p>目前在工程中应用最为广泛的平衡二叉排序结构是「红黑树」，它实际上牺牲了极小一部分检索效率性能，换来降低频繁平衡调整的可能性，总体而言开销更小。下一章学习初中生必知必会：红黑树。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://zl-wu.github.io/post/er-cha-pai-xu-shu-binary-sort-tree-wei-guan-ban/" class="post-title gt-a-link">
+                    二叉排序树 Binary Sort Tree (微观版)
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">不废话，就是干</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://zl-wu.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
